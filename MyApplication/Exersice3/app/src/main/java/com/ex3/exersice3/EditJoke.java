@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class EditJoke extends AppCompatActivity {
 
@@ -38,6 +39,12 @@ public class EditJoke extends AppCompatActivity {
             case (R.id.edit_done_button): {
                 JokeManager.getInstance(getApplicationContext()).SaveList();
                 finish();
+                break;
+            }
+            case (R.id.edit_joke_button): {
+                JokeManager.getInstance(getApplicationContext()).list.get(position).Joke =
+                        ((EditText)findViewById(R.id.edit_joke_text)).getText().toString();
+                Toast.makeText(EditJoke.this, "Text changed succesfully", Toast.LENGTH_SHORT).show();
                 break;
             }
         }
