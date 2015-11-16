@@ -9,7 +9,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_edit_joke" tools:context="com.ex3.exersice3.EditJoke">
 
-    <TextView
+    <EditText
         android:id="@+id/edit_joke_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/edit_joke_text"
         android:layout_centerHorizontal="true"
-        android:text="@string/edit_text" />
+        android:text="@string/edit_text"
+        android:onClick="handleClick"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
