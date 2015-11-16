@@ -12,4 +12,6 @@
     <string name="add_joke_field">Insert joke here</string>
     <string name="add_joke_author">Author</string>
     <string name="add_joke_date">Date</string>
+    <string name="add_joke_button">Add Joke</string>
+
 </resources>

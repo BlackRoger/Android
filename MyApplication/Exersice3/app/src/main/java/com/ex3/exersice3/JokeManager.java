@@ -100,8 +100,8 @@ public class JokeManager {
         JokesNum = prefs.getLong(PREFERENCE_JOKES_NUM, -1);
 
         // If so, we will create 3 jokes.
-        //if (JokesNum == -1)
-        if (true)
+        if (JokesNum == -1)
+        //if (true)
         {
             String[] Jokes = new String[] { "Knock knock", "A rabi, a priest and a mexican walk into a bar", "What is round and yellow?"};
             String[] Authors = new String[] { "Maya", "Ayalon", "Gandalf"};

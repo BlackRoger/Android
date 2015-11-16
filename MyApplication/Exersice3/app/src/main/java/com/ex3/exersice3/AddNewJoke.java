@@ -17,13 +17,15 @@ public class AddNewJoke extends AppCompatActivity {
     }
 
     /** Called when the user clicks the Send button */
-    public void handleClick(View view) {
+    public void addJoke(View view) {
         String JokeText = ((EditText)findViewById(R.id.add_joke_field)).getText().toString();
         String JokeAuthor = ((EditText)findViewById(R.id.add_author_field)).getText().toString();
-        try {
-            Date JokeDate = DateFormat.getInstance().parse(((EditText) findViewById(R.id.add_date_field)).getText().toString());
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
+        Date JokeDate = new Date();
+
+        JokeData joke = new JokeData(JokeText, JokeAuthor, JokeDate, JokeData.eLikeState.JOKE_UNDECIDED);
+        JokeManager.getInstance(getApplicationContext()).list.add(joke);
+        JokeManager.getInstance(getApplicationContext()).JokesNum++;
+        JokeManager.getInstance(getApplicationContext()).SaveList();
+        finish();
     }
 }

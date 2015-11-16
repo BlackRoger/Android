@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -75,9 +76,18 @@ public class JokesList extends AppCompatActivity {
             }
 
         });
+
+        Button button = (Button)findViewById(R.id.addJoke);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), AddNewJoke.class);
+                startActivity(intent);
+            }
+        });
     }
 
-    @Override
+        @Override
     protected void onResume() {
         super.onResume();
         final ListView listview = (ListView) findViewById(R.id.jokeList);
