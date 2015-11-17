@@ -92,7 +92,7 @@ public class JokesList extends AppCompatActivity {
         super.onResume();
         final ListView listview = (ListView) findViewById(R.id.jokeList);
         ArrayAdapter<JokeData> adapter = (ArrayAdapter<JokeData>)listview.getAdapter();
-        //adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         //listview.destroyDrawingCache();
     }
 }
