@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/joke_element"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:weightSum="1.0"
+    android:layoutDirection="ltr">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/joke_text"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_view_event_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/text_view_event_description"
+            android:layout_width="wrap_content"
+            android:layout_height="26dip"
+            android:text=""
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/text_view_time"
+            android:layout_width="wrap_content"
+            android:layout_height="26dip"
+            android:text=""
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/text_view_participation"
+            android:layout_width="wrap_content"
+            android:layout_height="26dip"
+            android:text=""
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
