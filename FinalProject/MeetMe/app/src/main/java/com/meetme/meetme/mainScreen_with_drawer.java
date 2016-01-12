@@ -83,8 +83,8 @@ public class mainScreen_with_drawer extends AppCompatActivity
         if (id == R.id.nav_friends) {
           //  startActivity(new Intent(this, FriendsScrollingActivity.class));
             startActivity(new Intent(this, FriendList.class));
-        } else if (id == R.id.nav_gallery) {
-        //    startActivity(new Intent(this, FriendsScrollingActivity.class));
+        } else if (id == R.id.nav_my_callendar) {
+            startActivity(new Intent(this, EventsCalendar.class));
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
