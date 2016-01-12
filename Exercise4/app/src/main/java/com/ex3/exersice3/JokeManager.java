@@ -2,6 +2,7 @@ package com.ex3.exersice3;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -24,15 +25,21 @@ public class JokeManager {
     public final String PREFERENCE_JOKE_AUTHOR = "com.ex3.exercise3.joke_author";
     public final String PREFERENCE_JOKE_DATE = "com.ex3.exercise3.joke_date";
     public final String PREFERENCE_JOKE_LIKE_STATE = "com.ex3.exercise3.joke_like_state";
-    public final String PREFERENCE_JOKE_DAY = "com.ex3.exercise3.joke_day";
-    public final String PREFERENCE_JOKE_MONTH = "com.ex3.exercise3.joke_month";
-    public final String PREFERENCE_JOKE_YEAR = "com.ex3.exercise3.joke_year";
+    public final String PREFERENCE_JOKE_BACKGROUND_COLOR = "com.ex3.exercise3.joke_background_color";
     public final String PREFERENCE_JOKES_NUM = "com.ex3.exercise3.joke_num";
+
+    public enum eJokeColor {
+        JOKE_COLOR_RED,
+        JOKE_COLOR_BLUE,
+        JOKE_COLOR_GREEN,
+        JOKE_COLOR_NUM
+    }
 
     private static JokeManager ourInstance;
     private static Context myContext;
     public ArrayList<JokeData> list;
     public long JokesNum;
+    private DataBaseOp db;
 
     public static JokeManager getInstance(Context context)
     {
@@ -44,8 +51,60 @@ public class JokeManager {
         return ourInstance;
     }
 
+    public void ChangeBackgroundColor(eJokeColor NewColor)
+    {
+        SharedPreferences prefs = myContext.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+
+        editor.putInt(PREFERENCE_JOKE_BACKGROUND_COLOR, NewColor.ordinal());
+        editor.commit();
+    }
+
+    public eJokeColor GetBackgroundColor()
+    {
+        SharedPreferences prefs = myContext.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
+        int colorOrdinal = prefs.getInt(PREFERENCE_JOKE_BACKGROUND_COLOR, eJokeColor.JOKE_COLOR_NUM.ordinal());
+        return(eJokeColor.values()[colorOrdinal]);
+    }
+
+    public void AddToList(JokeData data)
+    {
+        list.add(data);
+        db.InsertJoke(data.Author, data.Joke, data.LikeState.ordinal(), data.Creation_Date);
+
+        SharedPreferences prefs = myContext.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(PREFERENCE_JOKES_NUM, list.size());
+        editor.commit();
+    }
+
+    public void UpdateJokeText(int JokePosition, String NewJoke)
+    {
+        String OldJoke = list.get(JokePosition).Joke;
+        list.get(JokePosition).Joke = NewJoke;
+        db.UpdateJoke(OldJoke, list.get(JokePosition));
+    }
+
+    public void UpdateJokeLikeState(int JokePosition, JokeData.eLikeState LikeState)
+    {
+        list.get(JokePosition).LikeState = LikeState;
+        db.UpdateJoke(list.get(JokePosition).Joke, list.get(JokePosition));
+    }
+
+    public void RemoveFromList(JokeData data)
+    {
+        list.remove(data);
+        db.deleteJoke(data.Joke);
+
+        SharedPreferences prefs = myContext.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putLong(PREFERENCE_JOKES_NUM, list.size());
+        editor.commit();
+    }
+
     public void SaveList()
     {
+        /*
         SharedPreferences prefs = myContext.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         Integer index = 0;
@@ -61,31 +120,34 @@ public class JokeManager {
 
         editor.putLong(PREFERENCE_JOKES_NUM, JokesNum);
         editor.commit();
+        */
     }
 
     private ArrayList<JokeData> LoadList()
     {
-        SharedPreferences prefs = myContext.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
-        list = new ArrayList<JokeData>();
+        list.clear();
+        Cursor cr = db.getJokes();
+        cr.moveToFirst();
 
-        for (Integer index = 0; index < JokesNum; index++)
+        while (!cr.isAfterLast())
         {
-            String JokeText = prefs.getString(PREFERENCE_JOKE_TEXT + index.toString(), "");
-            String JokeAuthor = prefs.getString(PREFERENCE_JOKE_TEXT + index.toString(), "");
-            int LikeStateOrdinal = prefs.getInt(PREFERENCE_JOKE_LIKE_STATE + index.toString(), 0);
+            String JokeText = cr.getString(1);
+            String JokeAuthor = cr.getString(0);
+            int LikeStateOrdinal = cr.getInt(2);
             JokeData.eLikeState JokeLinkState = JokeData.eLikeState.values()[LikeStateOrdinal];
 
             Date JokeDate;
 
             try {
-                JokeDate = new Date(prefs.getLong(PREFERENCE_JOKE_DATE + index.toString(), 0));
+                JokeDate = new Date();
+                JokeDate.setDate(cr.getInt(3));
             } catch (Exception e) {
                 System.out.println(e.toString());
                 continue;
             }
 
             list.add(new JokeData(JokeText, JokeAuthor, JokeDate, JokeLinkState));
-            index++;
+            cr.moveToNext();
         }
 
         return list;
@@ -93,7 +155,9 @@ public class JokeManager {
 
     private JokeManager(Context context) {
         myContext = context;
+        list = new ArrayList<JokeData>();
         SharedPreferences prefs = context.getSharedPreferences(PREFERENCE_FILE, Context.MODE_PRIVATE);
+        db = new DataBaseOp(context);
 
         // Check if this is the first time starting this project.
         // If so create default jokes.
@@ -120,7 +184,7 @@ public class JokeManager {
             date[2] = calendar.getTime();
 
             for (int i = 0; i < Jokes.length; ++i) {
-                list.add(new JokeData(Jokes[i], Authors[i], date[i], LikeStates[i]));
+                AddToList(new JokeData(Jokes[i], Authors[i], date[i], LikeStates[i]));
             }
 
             JokesNum = list.size();

@@ -9,17 +9,16 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical"
     android:layoutDirection="ltr"
+    android:id="@+id/layout_joke_list"
     tools:showIn="@layout/activity_jokes_list" tools:context=".JokesList">
 
-    <Button
-        android:id="@+id/addJoke"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_joke"
-        android:layout_centerHorizontal="true"/>
 
     <ListView
         android:id="@+id/jokeList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
+
+
 </LinearLayout>
+
+
