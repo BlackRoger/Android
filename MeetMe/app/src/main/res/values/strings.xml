@@ -1,0 +1,55 @@
+<resources>
+    <string name="app_name">MeetMe</string>
+    <string name="title_activity_events_calendar">EventsCalendar</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="text_view_to_date">To Date:</string>
+    <string name="edit_text_from_date">From Date</string>
+    <string name="edit_text_event_name">Event Name</string>
+    <string name="edit_text_event_descryption">Event Descryption</string>
+    <string name="edit_text_location">Location</string>
+    <string name="spinner_recurrence">Recurrence</string>
+    <string name="spinner_event_type">Event Type</string>
+    <string name="spinner_event_sub_type">Secondary Type</string>
+    <string name="button_add_event">Confirm</string>
+    <string name="button_cancel_event">Cancel</string>
+    <string name="edit_text_participation_cap">Participation Cap</string>
+
+    <string-array name="recurrence_array">
+        <item>One Time Event</item>
+        <item>Daily</item>
+        <item>Weekly</item>
+        <item>Bi-Weekly</item>
+        <item>Workdays</item>
+        <item>Monthly</item>
+        <item>Yearly</item>
+    </string-array>
+
+    <string-array name="event_types_array">
+        <item>Other</item>
+        <item>Sport</item>
+        <item>Food</item>
+        <item>Social</item>
+    </string-array>
+
+    <string-array name="sport_event_types_array">
+        <item>Football</item>
+        <item>Soccer</item>
+        <item>Tenis</item>
+        <item>Golf</item>
+        <item>Swimming</item>
+    </string-array>
+
+    <string-array name="food_event_types_array">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+    </string-array>
+
+    <string-array name="social_event_types_array">
+        <item>Meeting</item>
+        <item>Hangout</item>
+        <item>Club</item>
+    </string-array>
+
+</resources>

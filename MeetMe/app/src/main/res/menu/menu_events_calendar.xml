@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+<<<<<<< HEAD:Exercise4/app/src/main/res/menu/menu_jokes_list.xml
+    android:layoutDirection="ltr">
+
+    <item android:id="@+id/main_menu"
+        android:title="@string/go_to_joke_list"
+        android:icon="@drawable/new_joke_image"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/menu_item_add_joke"
+        android:title="@string/menu_item_add_joke"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/menu_item_change_background"
+        android:title="@string/menu_item_change_background">
+
+        <menu>
+            <item android:id="@+id/menu_item_red"
+                android:title="@string/menu_item_red"/>
+            <item android:id="@+id/menu_item_blue"
+                android:title="@string/menu_item_blue"/>
+            <item android:id="@+id/menu_item_green"
+                android:title="@string/menu_item_green"/>
+        </menu>
+    </item>
+
+    <item android:id="@+id/menu_item_exit"
+        android:title="@string/menu_item_exit"
+        app:showAsAction="never"/>
+</menu>
+=======
+    xmlns:tools="http://schemas.android.com/tools" tools:context="com.guyard.meetme.EventsCalendar">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+</menu>
+>>>>>>> 3bf08f30e2cd92a57b3307da67b8158481921de0:MeetMe/app/src/main/res/menu/menu_events_calendar.xml
