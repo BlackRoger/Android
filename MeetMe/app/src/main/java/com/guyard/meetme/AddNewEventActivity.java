@@ -30,6 +30,7 @@ public class AddNewEventActivity extends AppCompatActivity
     private DateFormat mTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
     private DateFormat mDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
     View tmpView;
+    Date RelevantDate;
 
     EditText txtName;
     EditText txtDescryption;
@@ -203,20 +204,22 @@ public class AddNewEventActivity extends AppCompatActivity
 
     public void openDateDialog(View view) {
         DatePickerDialog DatePicker;
-        Date RelevantDate;
         tmpView = view;
 
-        if (view.getId() == R.id.edit_text_from_date) {
+        if (view.getId() == findViewById(R.id.edit_text_from_date).getId()) {
+            RelevantDate = mFromDate;
             mCalendar.setTimeInMillis(mFromDate.getTime());
         } else {
+            RelevantDate = mToDate;
             mCalendar.setTimeInMillis(mToDate.getTime());
         }
 
         DatePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                 mCalendar.set(selectedyear, selectedmonth, selectedday);
-
                 ((TextView)tmpView).setText(mDateFormat.format(mCalendar.getTime()));
+
+                RelevantDate.setTime(mCalendar.getTimeInMillis());
             }
         }, mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DATE));
         DatePicker.setTitle("Select Date");
@@ -225,12 +228,13 @@ public class AddNewEventActivity extends AppCompatActivity
 
     private void openTimeDialog(View view) {
         TimePickerDialog TimePicker;
-        Date RelevantDate;
         tmpView = view;
 
-        if (view.getId() == R.id.edit_text_from_date) {
+        if (view.getId() == findViewById(R.id.edit_text_from_time).getId()) {
+            RelevantDate = mFromDate;
             mCalendar.setTimeInMillis(mFromDate.getTime());
         } else {
+            RelevantDate = mToDate;
             mCalendar.setTimeInMillis(mToDate.getTime());
         }
 
@@ -239,6 +243,7 @@ public class AddNewEventActivity extends AppCompatActivity
                 mCalendar.set(mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH),
                         mCalendar.get(Calendar.DATE), selectedHour, selectedMinute);
 
+                RelevantDate.setTime(mCalendar.getTimeInMillis());
                 ((EditText) tmpView).setText(mTimeFormat.format(mCalendar.getTime()));
             }
         }, mCalendar.get(Calendar.HOUR), mCalendar.get(Calendar.MINUTE), true);
@@ -254,7 +259,10 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.ParticipationCap = Integer.valueOf(txtParticipationCap.getText().toString());
         NewEvent.EventType = EventInfo.eEventTypes.values()[spnEventTypeSpinner.getSelectedItemPosition()];
         NewEvent.EventSecondaryType = spnEventTypeSpinner.getSelectedItemPosition();
-        NewEvent.StartDate = txtFromDate.getText();
+        NewEvent.StartDate = new Integer((int)mFromDate.getTime());
+        NewEvent.EndDate = new Integer((int)mToDate.getTime());
+        NewEvent.OrganizerId = DataManager.getInstance(this).GetMyInfo().SecondaryId;
+        NewEvent.SecondaryId = 0;
 
         DataManager.getInstance(this).AddEvent(NewEvent);
     }
