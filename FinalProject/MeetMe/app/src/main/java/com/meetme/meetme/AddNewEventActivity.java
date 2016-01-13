@@ -2,6 +2,7 @@ package com.meetme.meetme;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,17 +21,21 @@ import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class AddNewEventActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
 
     Date mFromDate;
     Date mToDate;
+    EventInfo mOldEvent = null;
     Calendar mCalendar = Calendar.getInstance();
     private DateFormat mTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
     private DateFormat mDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
     View tmpView;
     Date RelevantDate;
+    boolean IgnoreNextEventSelection;
+    boolean IsUpdatingEvent;
 
     EditText txtName;
     EditText txtDescryption;
@@ -48,6 +53,8 @@ public class AddNewEventActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_event);
+        IgnoreNextEventSelection = true;
+        mCalendar.setTimeZone(TimeZone.getDefault());
 
         // initialize the spinners!
         txtName                 = (EditText)findViewById(R.id.edit_text_event_name);
@@ -82,66 +89,67 @@ public class AddNewEventActivity extends AppCompatActivity
 
         // Check if we were asked to modify an existing event
         if (Input != null) {
-            EventInfo ExistingEvent = (EventInfo)Input;
+            mOldEvent = (EventInfo)Input;
             mFromDate = new Date(((EventInfo) Input).StartDate.longValue());
             mToDate = new Date(((EventInfo) Input).EndDate.longValue());
-            InitExistingEvent(ExistingEvent);
+            InitExistingEvent(mOldEvent);
+            IsUpdatingEvent = true;
         } else {
-            Date NewEventDate = new Date(getIntent().getExtras().getLong(DayViewer.EVENT_INFO));
+            Date NewEventDate = new Date(getIntent().getExtras().getLong(DayViewer.EVENT_DATE));
             mFromDate = new Date(NewEventDate.getTime());
             mToDate = new Date(NewEventDate.getTime());
 
             InitNewEvent(NewEventDate);
+            IsUpdatingEvent = false;
         }
     }
 
     void InitExistingEvent(EventInfo ExistingEvent) {
-        UpdateSubtypeSpinner(ExistingEvent.EventType);
-
         txtName.setText(ExistingEvent.Name);
         txtDescryption.setText(ExistingEvent.Description);
         txtLocation.setText(ExistingEvent.Location);
 
         // Set the from date/time
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(ExistingEvent.StartDate);
-        txtFromDate.setText(mDateFormat.format(mCalendar.getTime()));
-        txtFromTime.setText(mTimeFormat.format(mCalendar.getTime()));
+        mFromDate = new Date(ExistingEvent.StartDate.longValue());
+        txtFromDate.setText(mDateFormat.format(mFromDate));
+        txtFromTime.setText(mTimeFormat.format(mFromDate));
 
         // Set the to date/time
-        calendar.setTimeInMillis(ExistingEvent.EndDate);
-        txtToDate.setText(mDateFormat.format(mCalendar.getTime()));
-        txtToTime.setText(mTimeFormat.format(mCalendar.getTime()));
-        txtParticipationCap.setText(ExistingEvent.ParticipationCap);
+        mToDate = new Date(ExistingEvent.EndDate.longValue());
+        txtToDate.setText(mDateFormat.format(mToDate));
+        txtToTime.setText(mTimeFormat.format(mToDate));
+        txtParticipationCap.setText(String.valueOf(ExistingEvent.ParticipationCap));
 
         spnRecurrenceSpinner.setSelection(ExistingEvent.Recurrence.ordinal());
         spnEventTypeSpinner.setSelection(ExistingEvent.EventType.ordinal());
+        UpdateSubtypeSpinner(ExistingEvent.EventType);
         spnEventSubtypeSpinner.setSelection(ExistingEvent.EventSecondaryType);
     }
 
     void InitNewEvent(Date EventDate) {
         // Set the from date/time
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(EventDate.getTime());
-        txtFromDate.setText(mDateFormat.format(mCalendar.getTime()));
-        txtFromTime.setText(mTimeFormat.format(mCalendar.getTime()));
+        mCalendar.setTime(EventDate);
+        mFromDate = EventDate;
+        txtFromDate.setText(mDateFormat.format(mFromDate));
+        txtFromTime.setText(mTimeFormat.format(mFromDate));
 
         // Set the to date/time
-        int Minute = calendar.get(Calendar.MINUTE);
-        int Hour = calendar.get(Calendar.HOUR);
-        if (Minute + 30 <= calendar.getActualMaximum(Calendar.MINUTE)){
+        int Minute = mCalendar.get(Calendar.MINUTE);
+        int Hour = mCalendar.get(Calendar.HOUR);
+        if (Minute + 30 <= mCalendar.getActualMaximum(Calendar.MINUTE)){
             Minute += 30;
-        } else if (Hour == calendar.getActualMaximum(Calendar.HOUR)) {
-            Minute = calendar.getActualMaximum(Calendar.MINUTE);
+        } else if (Hour == mCalendar.getActualMaximum(Calendar.HOUR)) {
+            Minute = mCalendar.getActualMaximum(Calendar.MINUTE);
         } else {
             Minute = (Minute + 30) % 60;
             Hour++;
         }
 
-        calendar.set(Calendar.MINUTE, Minute);
-        calendar.set(Calendar.HOUR, Hour);
-        txtToDate.setText(mDateFormat.format(mCalendar.getTime()));
-        txtToTime.setText(mTimeFormat.format(mCalendar.getTime()));
+        mCalendar.set(Calendar.MINUTE, Minute);
+        mCalendar.set(Calendar.HOUR, Hour);
+        mToDate = mCalendar.getTime();
+        txtToDate.setText(mDateFormat.format(mToDate));
+        txtToTime.setText(mTimeFormat.format(mToDate));
 
         txtParticipationCap.setText("0");
 
@@ -154,6 +162,12 @@ public class AddNewEventActivity extends AppCompatActivity
 
     public void onItemSelected(AdapterView<?> parent, View view,
                                int pos, long id) {
+        // The first time this is called, its because we selected from code, so do nothing.
+        if (IgnoreNextEventSelection) {
+            IgnoreNextEventSelection = false;
+            return;
+        }
+
         // First thing first - is this the first spinner?
         View EventTypeView = findViewById(R.id.spinner_event_type);
         Integer ViewId = parent.getId();
@@ -226,7 +240,7 @@ public class AddNewEventActivity extends AppCompatActivity
         DatePicker.show();
     }
 
-    private void openTimeDialog(View view) {
+    public void openTimeDialog(View view) {
         TimePickerDialog TimePicker;
         tmpView = view;
 
@@ -244,7 +258,7 @@ public class AddNewEventActivity extends AppCompatActivity
                         mCalendar.get(Calendar.DATE), selectedHour, selectedMinute);
 
                 RelevantDate.setTime(mCalendar.getTimeInMillis());
-                ((EditText) tmpView).setText(mTimeFormat.format(mCalendar.getTime()));
+                ((TextView) tmpView).setText(mTimeFormat.format(mCalendar.getTime()));
             }
         }, mCalendar.get(Calendar.HOUR), mCalendar.get(Calendar.MINUTE), true);
         TimePicker.setTitle("Select Time");
@@ -259,15 +273,27 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.ParticipationCap = Integer.valueOf(txtParticipationCap.getText().toString());
         NewEvent.EventType = EventInfo.eEventTypes.values()[spnEventTypeSpinner.getSelectedItemPosition()];
         NewEvent.EventSecondaryType = spnEventTypeSpinner.getSelectedItemPosition();
-        NewEvent.StartDate = new Integer((int)mFromDate.getTime());
-        NewEvent.EndDate = new Integer((int)mToDate.getTime());
+        NewEvent.StartDate = mFromDate.getTime();
+        NewEvent.EndDate = mToDate.getTime();
+        NewEvent.Recurrence = EventInfo.eReccurence.values()[spnRecurrenceSpinner.getSelectedItemPosition()];
         NewEvent.OrganizerId = DataManager.getInstance(this).GetMyInfo().SecondaryId;
         NewEvent.SecondaryId = 0;
 
-        DataManager.getInstance(this).AddEvent(NewEvent);
+        if (IsUpdatingEvent) {
+            DataManager.getInstance(this).UpdateEvent(mOldEvent, NewEvent);
+        } else {
+            DataManager.getInstance(this).AddEvent(NewEvent);
+        }
+
+        Intent ResultIntent = new Intent();
+        ResultIntent.putExtra(DayViewer.EVENT_FINAL, NewEvent);
+        setResult(RESULT_OK, ResultIntent);
+
+        finish();
     }
 
     public void button_on_click_cancel(View view) {
+        setResult(RESULT_CANCELED, null);
         finish();
     }
 }

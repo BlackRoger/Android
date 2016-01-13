@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.Profile;
+import com.meetme.meetme.DataManagers.DataManager;
 
 public class LoginActivity extends AppCompatActivity implements LoginActivityFragment.LoginListener {
 
@@ -59,6 +60,10 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
 
     @Override
     public void SuccessfulLogin(Profile profile) {
+
+        if (DataManager.getInstance(this).GetMyInfo() == null)
+            DataManager.getInstance(this).SetMyInfo(profile.getName());
+
         startActivity(new Intent(this, mainScreen_with_drawer.class));
     }
 }

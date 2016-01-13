@@ -6,6 +6,7 @@ import com.meetme.meetme.DataManagers.DataBase.DataBaseOp;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
 import com.meetme.meetme.DataManagers.DataBase.UserInfo;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -40,15 +41,55 @@ public class DataManager {
     }
 
     public List<EventInfo> GetMyEventsByMonth(Date MonthDate) {
-        return mDb.GetMyEventsByMonth(MonthDate);
+        Date DayStart;
+        Date DayEnd;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(MonthDate);
+        calendar.set(Calendar.HOUR, calendar.getActualMinimum(Calendar.HOUR));
+        calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
+        calendar.set(Calendar.MILLISECOND, calendar.getActualMinimum(Calendar.MILLISECOND));
+        calendar.set(Calendar.DATE, calendar.getActualMinimum(Calendar.DATE));
+        DayStart = calendar.getTime();
+
+        calendar.set(Calendar.HOUR, calendar.getActualMaximum(Calendar.HOUR));
+        calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
+        calendar.set(Calendar.MILLISECOND, calendar.getActualMaximum(Calendar.MILLISECOND));
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+        DayEnd = calendar.getTime();
+
+        return mDb.GetMyEventsInRange(DayStart, DayEnd, "");
     }
 
     public List<EventInfo> GetEventsByDay(Date DayDate) {
-        return mDb.GetMyEventsByDay(DayDate);
+        Date DayStart;
+        Date DayEnd;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(DayDate);
+        calendar.set(Calendar.HOUR, calendar.getActualMinimum(Calendar.HOUR));
+        calendar.set(Calendar.MINUTE, calendar.getActualMinimum(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, calendar.getActualMinimum(Calendar.SECOND));
+        calendar.set(Calendar.MILLISECOND, calendar.getActualMinimum(Calendar.MILLISECOND));
+        DayStart = calendar.getTime();
+
+        calendar.set(Calendar.HOUR, calendar.getActualMaximum(Calendar.HOUR));
+        calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE));
+        calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
+        calendar.set(Calendar.MILLISECOND, calendar.getActualMaximum(Calendar.MILLISECOND));
+        DayEnd = calendar.getTime();
+
+        return mDb.GetMyEventsInRange(DayStart, DayEnd, "");
     }
 
     public void AddEvent(EventInfo event) {
         mDb.AddEvent(event);
+    }
+
+    public void UpdateEvent(EventInfo OldEvent, EventInfo NewEvent) {
+        mDb.UpdateEvent(OldEvent, NewEvent);
     }
 }
 

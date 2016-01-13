@@ -26,6 +26,7 @@ public class EventInfo extends Object implements Serializable{
     }
 
     public enum eSportEventTypes {
+        EVENT_TYPE_OTHER,
         EVENT_TYPE_FOOTBALL,
         EVENT_TYPE_SOCCER,
         EVENT_TYPE_TENNIS,
@@ -34,23 +35,26 @@ public class EventInfo extends Object implements Serializable{
     }
 
     public enum eFoodEventTypes {
+        EVENT_TYPE_OTHER,
         EVENT_TYPE_BREAKFAST,
         EVENT_TYPE_LUNCH,
         EVENT_TYPE_DINNER,
     }
 
     public enum eSocialEventTypes {
+        EVENT_TYPE_OTHER,
         EVENT_TYPE_MEETING,
         EVENT_TYPE_HANGOUT,
         EVENT_TYPE_CLUB,
     }
 
+    public Long Id;
     public String Name;
     public String Description;
     public Integer OrganizerId;
     public Integer ParticipationCap;
-    public Integer StartDate;
-    public Integer EndDate;
+    public Long StartDate;
+    public Long EndDate;
     public eEventTypes EventType;
     public Integer EventSecondaryType;
     public eReccurence Recurrence;
@@ -59,9 +63,9 @@ public class EventInfo extends Object implements Serializable{
 
     public EventInfo() {}
     public EventInfo(String iName, String iDescription, Integer iOrganizerId,
-                     Integer iParticipationCap, Integer iStartDate, Integer iEndDate,
+                     Integer iParticipationCap, Long iStartDate, Long iEndDate,
                      eEventTypes iEventType, Integer iEventSecondaryType, eReccurence iRecurrence,
-                     String iLocation, Integer iSecondaryId) {
+                     String iLocation, Integer iSecondaryId, Long iId) {
         Name = iName;
         Description = iDescription;
         OrganizerId = iOrganizerId;
@@ -73,5 +77,6 @@ public class EventInfo extends Object implements Serializable{
         Recurrence = iRecurrence;
         Location = iLocation;
         SecondaryId = iSecondaryId;
+        Id = iId;
     }
 }

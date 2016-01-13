@@ -97,23 +97,56 @@
             android:id="@+id/edit_text_to_time"/>
     </LinearLayout>
 
-    <Spinner
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/spinner_recurrence"
-        android:id="@+id/spinner_recurrence"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/text_view_recurrence"/>
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/spinner_recurrence"
+            android:id="@+id/spinner_recurrence"/>
+    </LinearLayout>
 
-    <Spinner
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/spinner_event_type"
-        android:id="@+id/spinner_event_type"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/text_view_event_type"/>
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/spinner_event_type"
+            android:id="@+id/spinner_event_type"/>
+        </LinearLayout>
 
-    <Spinner
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/spinner_event_sub_type"
-        android:id="@+id/spinner_event_sub_type"/>
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="@string/text_view_event_sub_type"/>
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:text="@string/spinner_event_sub_type"
+            android:id="@+id/spinner_event_sub_type"/>
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -122,13 +155,13 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:layout_height="wrap_content"
             android:text="@string/edit_text_participation_cap"/>
 
         <EditText
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="3"
             android:layout_height="wrap_content"
             android:text="0"
             android:id="@+id/edit_text_event_participation_cap"
@@ -141,15 +174,17 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/button_add_event"
             android:onClick="button_on_click_confirm"
             android:text="@string/button_add_event"/>
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:id="@+id/button_cancel_event"
             android:onClick="button_on_click_cancel"
             android:text="@string/button_cancel_event"/>

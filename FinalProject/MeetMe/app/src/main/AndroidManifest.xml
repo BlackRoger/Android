@@ -70,14 +70,16 @@
 
         <activity
             android:name=".EventsCalendar"
+            android:theme="@style/AppTheme"
             android:label="@string/title_activity_events_calendar"
-            android:layoutDirection="ltr"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:layoutDirection="ltr">
         </activity>
         <activity android:name=".AddNewEventActivity"
+            android:theme="@style/AppTheme"
             android:layoutDirection="ltr">
         </activity>
         <activity android:name=".DayViewer"
+            android:theme="@style/AppTheme"
             android:layoutDirection="ltr">
         </activity>
     </application>

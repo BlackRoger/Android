@@ -81,7 +81,7 @@ public class LoginActivityFragment extends Fragment {
         };
         mTokenTracker.startTracking();
         mProfileTracker.startTracking();
-      //  hash a = new hash();
+        hash a = new hash();
         // Initialize the SDK before executing any other operations,
         // especially, if you're using Facebook UI elements.
     }

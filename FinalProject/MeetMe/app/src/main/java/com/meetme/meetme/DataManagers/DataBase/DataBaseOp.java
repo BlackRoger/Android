@@ -19,6 +19,7 @@ public class DataBaseOp extends SQLiteOpenHelper {
 
     private static final String COMMA_SEP = ", ";
     private static final String AND_SEP = " AND ";
+    private static final String OR_SEP = " OR ";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
 
@@ -120,6 +121,7 @@ public class DataBaseOp extends SQLiteOpenHelper {
             Log.d(" dataBase operations", "Failed to insert row");
         } else {
             Log.d(" dataBase operations", "One raw inserted");
+            Event.Id = k;
         }
     }
 
@@ -151,31 +153,34 @@ public class DataBaseOp extends SQLiteOpenHelper {
         return new UserInfo(CR.getString(0), true, CR.getInt(1));
     }
 
-    public List<EventInfo> GetMyEventsByMonth(Date MonthDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(MonthDate);
-        calendar.set(Calendar.DATE, 1);
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        String strMonthStartInMillis = String.valueOf(calendar.getTime().getTime());
+    public List<EventInfo> GetMyEventsInRange(Date RangeStart, Date RangeEnd,
+                                              String AdditionalFilters) {
+        String strRangeStartInMillis = String.valueOf(RangeStart.getTime());
+        String strRangeEndInMillis = String.valueOf(RangeEnd.getTime());
+        String NewFilter;
 
-        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        calendar.set(Calendar.HOUR, calendar.getActualMaximum(Calendar.HOUR));
-        calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE));
-        calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
-        String strMonthEndInMillis = String.valueOf(calendar.getTime().getTime());
+        // Check if there are additional filters
+        if (AdditionalFilters != null && AdditionalFilters.compareTo("") != 0) {
+            NewFilter = "(" + EventTable.EventInfo.END_DATE + ">= " + strRangeStartInMillis + AND_SEP +
+                    EventTable.EventInfo.START_DATE + "<= " + strRangeEndInMillis + ")" + AND_SEP +
+                    "(" + AdditionalFilters + ")";
+        } else {
+            NewFilter = EventTable.EventInfo.END_DATE + ">= " + strRangeStartInMillis + AND_SEP +
+                    EventTable.EventInfo.START_DATE + "<= " + strRangeEndInMillis;
+        }
 
+        return GetMyEventsByFilter(NewFilter);
+    }
+
+    public List<EventInfo> GetMyEventsByFilter(String Filters) {
         SQLiteDatabase SQ = this.getReadableDatabase();
         String[] columns = {EventTable.EventInfo.NAME, EventTable.EventInfo.DESCRIPTION,
                 EventTable.EventInfo.ORGANIZER, EventTable.EventInfo.PARTICIPATION_CAP,
                 EventTable.EventInfo.START_DATE, EventTable.EventInfo.END_DATE,
                 EventTable.EventInfo.EVENT_TYPE, EventTable.EventInfo.EVENT_SECONDARY_TYPE,
                 EventTable.EventInfo.RECURRENCE, EventTable.EventInfo.LOCATION,
-                EventTable.EventInfo.SECONDARY_ID};
-        Cursor cr = SQ.query(EventTable.EventInfo.TABLE_NAME, columns,
-                EventTable.EventInfo.END_DATE + ">= " + strMonthStartInMillis + AND_SEP +
-                        EventTable.EventInfo.START_DATE + "<= " + strMonthEndInMillis,
+                EventTable.EventInfo.SECONDARY_ID, EventTable.EventInfo._ID};
+        Cursor cr = SQ.query(EventTable.EventInfo.TABLE_NAME, columns, Filters,
                 null, null, null, null);
 
         // Now transform the cursor to a normal event list
@@ -186,10 +191,10 @@ public class DataBaseOp extends SQLiteOpenHelper {
         {
             EventInfo currEvent = new EventInfo(cr.getString(0), cr.getString(1),
                     cr.getInt(2), cr.getInt(3),
-                    cr.getInt(4), cr.getInt(5),
+                    cr.getLong(4), cr.getLong(5),
                     EventInfo.eEventTypes.values()[cr.getInt(6)], cr.getInt(7),
                     EventInfo.eReccurence.values()[cr.getInt(8)], cr.getString(9),
-                    cr.getInt(10));
+                    cr.getInt(10), cr.getLong(11));
 
             EventsList.add(currEvent);
             cr.moveToNext();
@@ -198,76 +203,26 @@ public class DataBaseOp extends SQLiteOpenHelper {
         return EventsList;
     }
 
-    public List<EventInfo> GetMyEventsByDay(Date MonthDate) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(MonthDate);
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        String strMonthStartInMillis = String.valueOf(calendar.getTime().getTime());
-
-        calendar.set(Calendar.HOUR, calendar.getActualMaximum(Calendar.HOUR));
-        calendar.set(Calendar.MINUTE, calendar.getActualMaximum(Calendar.MINUTE));
-        calendar.set(Calendar.SECOND, calendar.getActualMaximum(Calendar.SECOND));
-        String strMonthEndInMillis = String.valueOf(calendar.getTime().getTime());
-
-        SQLiteDatabase SQ = this.getReadableDatabase();
-        String[] columns = {EventTable.EventInfo.NAME, EventTable.EventInfo.DESCRIPTION,
-                EventTable.EventInfo.ORGANIZER, EventTable.EventInfo.PARTICIPATION_CAP,
-                EventTable.EventInfo.START_DATE, EventTable.EventInfo.END_DATE,
-                EventTable.EventInfo.EVENT_TYPE, EventTable.EventInfo.EVENT_SECONDARY_TYPE,
-                EventTable.EventInfo.RECURRENCE, EventTable.EventInfo.LOCATION,
-                EventTable.EventInfo.SECONDARY_ID};
-        Cursor cr = SQ.query(EventTable.EventInfo.TABLE_NAME, columns,
-                EventTable.EventInfo.END_DATE + ">= " + strMonthStartInMillis + AND_SEP +
-                        EventTable.EventInfo.START_DATE + "<= " + strMonthEndInMillis,
-                null, null, null, null);
-
-        // Now transform the cursor to a normal event list
-        cr.moveToFirst();
-        ArrayList<EventInfo> EventsList = new ArrayList<EventInfo>();
-
-        while (!cr.isAfterLast())
-        {
-            EventInfo currEvent = new EventInfo(cr.getString(0), cr.getString(1),
-                    cr.getInt(2), cr.getInt(3),
-                    cr.getInt(4), cr.getInt(5),
-                    EventInfo.eEventTypes.values()[cr.getInt(6)], cr.getInt(7),
-                    EventInfo.eReccurence.values()[cr.getInt(8)], cr.getString(9),
-                    cr.getInt(10));
-
-            EventsList.add(currEvent);
-            cr.moveToNext();
-        }
-
-        return EventsList;
-    }
-
-    /*
-    public Cursor GetFriends(){
-        SQLiteDatabase SQ = this.getReadableDatabase();
-        String[] columns = {JokeDataTable.JokeInfo.JOKE_AUTHOR, JokeDataTable.JokeInfo.JOKE, JokeDataTable.JokeInfo.LIKE_STATE, JokeDataTable.JokeInfo.DATE_TIME};
-        //Cursor CR = SQ.query(JokeDataTable.JokeInfo.TABLE_NAME, columns, null, null, null, null);
-        Cursor CR = SQ.query(JokeDataTable.JokeInfo.TABLE_NAME, columns, null, null, null, null, null);
-        return CR;
-    }
-    */
-
-    /*
-    public void UpdateJoke(String OldJoke, JokeData NewJokeData){
-        String selection = JokeDataTable.JokeInfo.JOKE + "= ?";
-        //  String coloumns[] = {JokeDataTable.JokeInfo.JOKE_AUTHOR};
-        String args[] = {OldJoke};
+    public void UpdateEvent(EventInfo OldEvent, EventInfo NewEvent){
+        String selection = EventTable.EventInfo._ID + "= ?";
+        String args[] = {String.valueOf(OldEvent.Id)};
         SQLiteDatabase SQ = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        cv.put(JokeDataTable.JokeInfo.JOKE_AUTHOR, NewJokeData.Author);
-        cv.put(JokeDataTable.JokeInfo.JOKE, NewJokeData.Joke);
-        cv.put(JokeDataTable.JokeInfo.LIKE_STATE, NewJokeData.LikeState.ordinal());
-        cv.put(JokeDataTable.JokeInfo.DATE_TIME, NewJokeData.Creation_Date.getDate());
-        SQ.update(JokeDataTable.JokeInfo.TABLE_NAME, cv, selection, args);
+        cv.put(EventTable.EventInfo.NAME, NewEvent.Name);
+        cv.put(EventTable.EventInfo.DESCRIPTION, NewEvent.Description);
+        cv.put(EventTable.EventInfo.EVENT_TYPE, NewEvent.EventType.ordinal());
+        cv.put(EventTable.EventInfo.EVENT_SECONDARY_TYPE, NewEvent.EventSecondaryType);
+        cv.put(EventTable.EventInfo.ORGANIZER, NewEvent.OrganizerId);
+        cv.put(EventTable.EventInfo.PARTICIPATION_CAP, NewEvent.ParticipationCap);
+        cv.put(EventTable.EventInfo.RECURRENCE, NewEvent.Recurrence.ordinal());
+        cv.put(EventTable.EventInfo.START_DATE, NewEvent.StartDate);
+        cv.put(EventTable.EventInfo.END_DATE, NewEvent.EndDate);
+        cv.put(EventTable.EventInfo.LOCATION, NewEvent.Location);
+        cv.put(EventTable.EventInfo.SECONDARY_ID, NewEvent.SecondaryId);
+
+        SQ.update(EventTable.EventInfo.TABLE_NAME, cv, selection, args);
     }
-    */
 
     public void RemoveEvent(Integer EventSecondaryId){
         String selection = EventTable.EventInfo.SECONDARY_ID + "= ?";

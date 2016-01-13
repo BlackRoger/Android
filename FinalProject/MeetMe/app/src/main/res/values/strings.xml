@@ -15,10 +15,10 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_navigation_drawer">NavigationDrawer</string>
-    <string name="title_activity_events_calendar">EventsCalendar</string>
+    <string name="title_activity_events_calendar">Calendar</string>
     <string name="title_activity_logout">Logout</string>
     <string name="title_activity_friend_list">FriendList</string>
-    <string name="title_activity_main_screen_with_drawer">mainScreen_with_drawer</string>
+    <string name="title_activity_main_screen_with_drawer">MeetMe</string>
     <string name="title_activity_friends_scrolling">FriendsScrollingActivity</string>
 
     <string name="text_view_to_date">To Date:</string>
@@ -31,6 +31,9 @@
     <string name="spinner_event_sub_type">Secondary Type</string>
     <string name="button_add_event">Confirm</string>
     <string name="button_cancel_event">Cancel</string>
+    <string name="text_view_recurrence">Recurrence</string>
+    <string name="text_view_event_type">Event Type</string>
+    <string name="text_view_event_sub_type">Event Sub Type</string>
     <string name="edit_text_participation_cap">Participation Cap</string>
 
     <string-array name="recurrence_array">
@@ -51,6 +54,7 @@
     </string-array>
 
     <string-array name="sport_event_types_array">
+        <item>Other</item>
         <item>Football</item>
         <item>Soccer</item>
         <item>Tenis</item>
@@ -59,12 +63,14 @@
     </string-array>
 
     <string-array name="food_event_types_array">
+        <item>Other</item>
         <item>Breakfast</item>
         <item>Lunch</item>
         <item>Dinner</item>
     </string-array>
 
     <string-array name="social_event_types_array">
+        <item>Other</item>
         <item>Meeting</item>
         <item>Hangout</item>
         <item>Club</item>
