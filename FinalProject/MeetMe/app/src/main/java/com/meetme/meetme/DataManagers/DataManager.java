@@ -91,5 +91,9 @@ public class DataManager {
     public void UpdateEvent(EventInfo OldEvent, EventInfo NewEvent) {
         mDb.UpdateEvent(OldEvent, NewEvent);
     }
+
+    public void RemoveEvent(Long EventId) {
+        mDb.RemoveEvent(EventId);
+    }
 }
 

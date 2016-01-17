@@ -51,8 +51,26 @@ public class AddNewEventActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Date NewEventDate = null;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_event);
+
+        Serializable Input = getIntent().getExtras().getSerializable(DayViewer.EVENT_INFO);
+
+        // Check if we were asked to modify an existing event
+        if (Input != null) {
+            mOldEvent = (EventInfo)Input;
+            mFromDate = new Date(((EventInfo) Input).StartDate.longValue());
+            mToDate = new Date(((EventInfo) Input).EndDate.longValue());
+            IsUpdatingEvent = true;
+            setContentView(R.layout.activity_modify_event);
+        } else {
+            NewEventDate = new Date(getIntent().getExtras().getLong(DayViewer.EVENT_DATE));
+            mFromDate = new Date(NewEventDate.getTime());
+            mToDate = new Date(NewEventDate.getTime());
+            IsUpdatingEvent = false;
+            setContentView(R.layout.activity_add_new_event);
+        }
+
         IgnoreNextEventSelection = true;
         mCalendar.setTimeZone(TimeZone.getDefault());
 
@@ -85,22 +103,10 @@ public class AddNewEventActivity extends AppCompatActivity
         spnEventTypeSpinner.setSelection(0);
         spnEventTypeSpinner.setOnItemSelectedListener(this);
 
-        Serializable Input = getIntent().getExtras().getSerializable(DayViewer.EVENT_INFO);
-
-        // Check if we were asked to modify an existing event
-        if (Input != null) {
-            mOldEvent = (EventInfo)Input;
-            mFromDate = new Date(((EventInfo) Input).StartDate.longValue());
-            mToDate = new Date(((EventInfo) Input).EndDate.longValue());
+        if (IsUpdatingEvent) {
             InitExistingEvent(mOldEvent);
-            IsUpdatingEvent = true;
         } else {
-            Date NewEventDate = new Date(getIntent().getExtras().getLong(DayViewer.EVENT_DATE));
-            mFromDate = new Date(NewEventDate.getTime());
-            mToDate = new Date(NewEventDate.getTime());
-
             InitNewEvent(NewEventDate);
-            IsUpdatingEvent = false;
         }
     }
 
@@ -287,6 +293,7 @@ public class AddNewEventActivity extends AppCompatActivity
 
         Intent ResultIntent = new Intent();
         ResultIntent.putExtra(DayViewer.EVENT_FINAL, NewEvent);
+        ResultIntent.putExtra(DayViewer.EVENT_REMOVED, false);
         setResult(RESULT_OK, ResultIntent);
 
         finish();
@@ -295,5 +302,14 @@ public class AddNewEventActivity extends AppCompatActivity
     public void button_on_click_cancel(View view) {
         setResult(RESULT_CANCELED, null);
         finish();
+    }
+
+    public void button_on_click_remove(View view) {
+        DataManager.getInstance(this).RemoveEvent(mOldEvent.Id);
+        finish();
+
+        Intent ResultIntent = new Intent();
+        ResultIntent.putExtra(DayViewer.EVENT_REMOVED, true);
+        setResult(RESULT_OK, ResultIntent);
     }
 }

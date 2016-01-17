@@ -224,9 +224,9 @@ public class DataBaseOp extends SQLiteOpenHelper {
         SQ.update(EventTable.EventInfo.TABLE_NAME, cv, selection, args);
     }
 
-    public void RemoveEvent(Integer EventSecondaryId){
-        String selection = EventTable.EventInfo.SECONDARY_ID + "= ?";
-        String args[] = {EventSecondaryId.toString()};
+    public void RemoveEvent(Long EventId){
+        String selection = EventTable.EventInfo._ID + "= ?";
+        String args[] = {EventId.toString()};
         SQLiteDatabase SQ = this.getWritableDatabase();
         SQ.delete(EventTable.EventInfo.TABLE_NAME, selection, args);
     }

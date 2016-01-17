@@ -25,6 +25,7 @@ public class DayViewer extends AppCompatActivity {
     public static final String EVENT_INFO = "Event_Info";
     public static final String EVENT_DATE = "Event_Date";
     public static final String EVENT_FINAL = "Event_Final";
+    public static final String EVENT_REMOVED = "Event_Removed";
     private static final int ADD_EVENT_REQUEST = 1;
     private static final int UPDATE_EVENT_REQUEST = 2;
 

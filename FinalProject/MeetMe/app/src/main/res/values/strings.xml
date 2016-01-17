@@ -30,7 +30,9 @@
     <string name="spinner_event_type">Event Type</string>
     <string name="spinner_event_sub_type">Secondary Type</string>
     <string name="button_add_event">Confirm</string>
+    <string name="button_modify_event">Update</string>
     <string name="button_cancel_event">Cancel</string>
+    <string name="button_remove_event">Remove</string>
     <string name="text_view_recurrence">Recurrence</string>
     <string name="text_view_event_type">Event Type</string>
     <string name="text_view_event_sub_type">Event Sub Type</string>
