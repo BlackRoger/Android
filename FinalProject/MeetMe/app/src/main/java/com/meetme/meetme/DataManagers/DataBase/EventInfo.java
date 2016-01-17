@@ -7,6 +7,9 @@ import java.io.Serializable;
  */
 public class EventInfo extends Object implements Serializable{
 
+
+
+
     public enum eReccurence {
         RECCURENCE_NONE,
         RECCURENCE_DAILY,

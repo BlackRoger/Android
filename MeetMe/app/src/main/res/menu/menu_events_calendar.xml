@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<HEAD:menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-<<<<<<< HEAD:Exercise4/app/src/main/res/menu/menu_jokes_list.xml
+    xmlns:HEAD="http://schemas.android.com/tools"
+    HEAD:Exercise4/app/src/main/res/menu/menu_jokes_list.xml
     android:layoutDirection="ltr">
 
     <item android:id="@+id/main_menu"

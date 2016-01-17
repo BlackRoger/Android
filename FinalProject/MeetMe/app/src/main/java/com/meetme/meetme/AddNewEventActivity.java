@@ -282,7 +282,7 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.StartDate = mFromDate.getTime();
         NewEvent.EndDate = mToDate.getTime();
         NewEvent.Recurrence = EventInfo.eReccurence.values()[spnRecurrenceSpinner.getSelectedItemPosition()];
-        NewEvent.OrganizerId = DataManager.getInstance(this).GetMyInfo().SecondaryId;
+        NewEvent.OrganizerId = 0;//DataManager.getInstance(this).GetMyInfo().SecondaryId;
         NewEvent.SecondaryId = 0;
 
         if (IsUpdatingEvent) {
