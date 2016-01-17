@@ -17,7 +17,7 @@ public class DataManager {
     private static DataManager mInstance;
     private DataBaseOp mDb;
 
-    private DataManager(Context context) {
+    public DataManager(Context context) {
         mDb = new DataBaseOp(context);
     }
 

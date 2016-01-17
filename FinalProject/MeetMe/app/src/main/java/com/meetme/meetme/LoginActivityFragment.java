@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.AccessToken;
@@ -98,7 +99,7 @@ public class LoginActivityFragment extends Fragment {
         LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
         loginButton.setReadPermissions("user_friends");
         loginButton.setFragment(this);
-        loginButton.registerCallback(mCallbackManager,mCallback);
+        loginButton.registerCallback(mCallbackManager, mCallback);
     }
 
     @Override
