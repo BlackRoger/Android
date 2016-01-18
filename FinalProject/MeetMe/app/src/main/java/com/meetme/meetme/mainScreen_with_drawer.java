@@ -42,6 +42,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
+import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
 import com.meetme.meetme.DataManagers.DataManager;
@@ -147,15 +148,10 @@ public class mainScreen_with_drawer extends AppCompatActivity
             startActivity(new Intent(this, FriendList.class));
         } else if (id == R.id.nav_my_callendar) {
             startActivity(new Intent(this, EventsCalendar.class));
-        } else if (id == R.id.nav_slideshow) {
-            startActivity(new Intent(this, FriendsScrollingActivity.class));
         } else if (id == R.id.nav_search_events) {
             startActivity(new Intent(this, SearchEventsActivity.class));
         } else if (id == R.id.nav_Logout) {
-            //     startActivity(new Intent(this, LoginActivityFragment.class));
             finish();
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -308,6 +304,7 @@ public class mainScreen_with_drawer extends AppCompatActivity
                         drawable = getResources().getDrawable(R.drawable.tennis);
                         break;
                     case EVENT_TYPE_SWIMMING:
+                        drawable = getResources().getDrawable(R.drawable.swimming);
                         break;
                     case EVENT_TYPE_SOCCER:
                         drawable = getResources().getDrawable(R.drawable.soccer);
@@ -323,13 +320,13 @@ public class mainScreen_with_drawer extends AppCompatActivity
             case EVENT_TYPE_SOCIAL:
                 switch (EventInfo.eSocialEventTypes.values()[eventSecondaryType]) {
                     case EVENT_TYPE_CLUB:
-                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        drawable = getResources().getDrawable(R.drawable.club);
                         break;
                     case EVENT_TYPE_HANGOUT:
-                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        drawable = getResources().getDrawable(R.drawable.hangout);
                         break;
                     case EVENT_TYPE_MEETING:
-                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        drawable = getResources().getDrawable(R.drawable.meeting);
                         break;
                 }
                 break;
@@ -338,13 +335,13 @@ public class mainScreen_with_drawer extends AppCompatActivity
             case EVENT_TYPE_FOOD:
                 switch (EventInfo.eFoodEventTypes.values()[eventSecondaryType]) {
                     case EVENT_TYPE_DINNER:
-                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        drawable = getResources().getDrawable(R.drawable.dinner);
                         break;
                     case EVENT_TYPE_LUNCH:
-                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        drawable = getResources().getDrawable(R.drawable.lunch);
                         break;
                     case EVENT_TYPE_BREAKFAST:
-                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        drawable = getResources().getDrawable(R.drawable.breakfast);
                         break;
                 }
                 break;
