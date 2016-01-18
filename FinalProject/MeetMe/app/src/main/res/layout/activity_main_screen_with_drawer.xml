@@ -8,36 +8,40 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <RelativeLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp"
         android:fitsSystemWindows="true">
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        <include
+            layout="@layout/app_bar_main_screen_with_drawer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_height="wrap_content" />
 
-            <include
-                layout="@layout/app_bar_main_screen_with_drawer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:scrollbars="vertical" />
 
-        </LinearLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_main_screen_add_new_event"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:background="@color/caldroid_sky_blue"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@android:drawable/ic_input_add" />
+        </RelativeLayout>
 
-        <android.support.design.widget.FloatingActionButton android:id="@+id/fab_main_screen_add_new_event"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end" android:layout_margin="@dimen/fab_margin"
-            android:src="@android:drawable/ic_dialog_email" />
-
-    </RelativeLayout>
+    </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
