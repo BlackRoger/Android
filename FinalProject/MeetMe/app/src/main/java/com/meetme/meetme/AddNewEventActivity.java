@@ -278,7 +278,7 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.Location = txtLocation.getText().toString();
         NewEvent.ParticipationCap = Integer.valueOf(txtParticipationCap.getText().toString());
         NewEvent.EventType = EventInfo.eEventTypes.values()[spnEventTypeSpinner.getSelectedItemPosition()];
-        NewEvent.EventSecondaryType = spnEventTypeSpinner.getSelectedItemPosition();
+        NewEvent.EventSecondaryType = spnEventSubtypeSpinner.getSelectedItemPosition();
         NewEvent.StartDate = mFromDate.getTime();
         NewEvent.EndDate = mToDate.getTime();
         NewEvent.Recurrence = EventInfo.eReccurence.values()[spnRecurrenceSpinner.getSelectedItemPosition()];
