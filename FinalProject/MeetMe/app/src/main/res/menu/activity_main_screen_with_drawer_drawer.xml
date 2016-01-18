@@ -2,23 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item android:id="@+id/nav_friends" android:icon="@android:drawable/ic_menu_camera"
+        <item android:id="@+id/nav_friends" android:icon="@android:drawable/ic_menu_myplaces"
             android:title="Friends" />
-        <item android:id="@+id/nav_my_callendar" android:icon="@android:drawable/ic_menu_gallery"
+        <item android:id="@+id/nav_my_callendar" android:icon="@android:drawable/ic_menu_today"
             android:title="My Calendar" />
-        <item android:id="@+id/nav_slideshow" android:icon="@android:drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item android:id="@+id/nav_manage" android:icon="@android:drawable/ic_menu_manage"
-            android:title="Tools" />
     </group>
 
     <item android:title="Communicate">
         <menu>
-            <item android:id="@+id/nav_Logout" android:icon="@android:drawable/ic_menu_share"
+            <item android:id="@+id/nav_Logout" android:icon="@android:drawable/ic_menu_close_clear_cancel"
                 android:title="Logout" />
-            <item android:id="@+id/nav_send" android:icon="@android:drawable/ic_menu_send"
-                android:title="Send" />
         </menu>
     </item>
 
 </menu>
+
