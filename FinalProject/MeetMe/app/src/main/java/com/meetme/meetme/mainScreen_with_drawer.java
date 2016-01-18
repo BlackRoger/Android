@@ -42,6 +42,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
@@ -151,6 +152,7 @@ public class mainScreen_with_drawer extends AppCompatActivity
         } else if (id == R.id.nav_search_events) {
             startActivity(new Intent(this, SearchEventsActivity.class));
         } else if (id == R.id.nav_Logout) {
+            LoginManager.getInstance().logOut();
             finish();
         }
 
