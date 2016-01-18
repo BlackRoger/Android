@@ -186,6 +186,10 @@ public class mainScreen_with_drawer extends AppCompatActivity
             itemList.remove(position);
         }
 
+        public void UpdateList(List<EventInfo> NewList) {
+            itemList = NewList;
+        }
+
         public void UpdateItemAtPosition(int position, EventInfo NewEvent) {
             itemList.remove(position);
             itemList.add(position, NewEvent);
@@ -349,4 +353,17 @@ public class mainScreen_with_drawer extends AppCompatActivity
         EditEventIntent.putExtra(DayViewer.EVENT_INFO, Event);
         startActivityForResult(EditEventIntent, DayViewer.UPDATE_EVENT_REQUEST);
     }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        List<EventInfo> gaggeredList = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
+        rcAdapter.UpdateList(gaggeredList);
+        rcAdapter.notifyDataSetChanged();
+
+        // TODO: Make the list update on new events here
+    }
+
 }

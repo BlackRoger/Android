@@ -5,11 +5,6 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:fitsSystemWindows="true" tools:openDrawer="start">
 
-    <android.support.design.widget.NavigationView android:id="@+id/nav_view"
-        android:layout_width="wrap_content" android:layout_height="match_parent"
-        android:layout_gravity="start" android:fitsSystemWindows="true"
-        app:menu="@menu/activity_main_screen_with_drawer_drawer" />
-
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -27,6 +22,11 @@
             android:scrollbars="vertical" />
 
     </LinearLayout>
+
+    <android.support.design.widget.NavigationView android:id="@+id/nav_view"
+        android:layout_width="wrap_content" android:layout_height="match_parent"
+        android:layout_gravity="start" android:fitsSystemWindows="true"
+        app:menu="@menu/activity_main_screen_with_drawer_drawer" />
 
 <!-- app:headerLayout="@layout/nav_header_main_screen_with_drawer"-->
 
