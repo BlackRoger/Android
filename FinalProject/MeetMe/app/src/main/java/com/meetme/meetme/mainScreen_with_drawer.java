@@ -41,6 +41,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
 import com.facebook.Profile;
+import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
 import com.meetme.meetme.DataManagers.DataManager;
@@ -132,7 +133,6 @@ public class mainScreen_with_drawer extends AppCompatActivity
         } else if (id == R.id.nav_my_callendar) {
             startActivity(new Intent(this, EventsCalendar.class));
         } else if (id == R.id.nav_Logout) {
-            //     startActivity(new Intent(this, LoginActivityFragment.class));
             finish();
         }
 
