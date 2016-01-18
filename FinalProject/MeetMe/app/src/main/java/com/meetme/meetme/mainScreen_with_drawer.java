@@ -324,7 +324,6 @@ public class mainScreen_with_drawer extends AppCompatActivity
                         break;
                 }
                 break;
-
         }
         return drawable;
     }

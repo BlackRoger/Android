@@ -125,7 +125,11 @@ public class DayViewer extends AppCompatActivity {
                     AddEventToSchedule((EventInfo)data.getExtras().getSerializable(EVENT_FINAL));
                     break;
                 case (UPDATE_EVENT_REQUEST) :
-                    UpdateCurrentEvent((EventInfo)data.getExtras().getSerializable(EVENT_FINAL));
+                    if (data.getExtras().getBoolean(EVENT_REMOVED)) {
+                        RemoveCurrentEvent();
+                    } else {
+                        UpdateCurrentEvent((EventInfo) data.getExtras().getSerializable(EVENT_FINAL));
+                    }
                     break;
             }
         }
@@ -145,6 +149,12 @@ public class DayViewer extends AppCompatActivity {
         EventInfo OldEvent = mAdapter.getItem(mCurrPosition);
         mAdapter.remove(OldEvent);
         mAdapter.insert(NewEvent, mCurrPosition);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void RemoveCurrentEvent() {
+        EventInfo OldEvent = mAdapter.getItem(mCurrPosition);
+        mAdapter.remove(OldEvent);
         mAdapter.notifyDataSetChanged();
     }
 }
