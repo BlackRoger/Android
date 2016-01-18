@@ -132,7 +132,7 @@ public class mainScreen_with_drawer extends AppCompatActivity
         } else if (id == R.id.nav_my_callendar) {
             startActivity(new Intent(this, EventsCalendar.class));
         } else if (id == R.id.nav_slideshow) {
-
+            startActivity(new Intent(this, FriendsScrollingActivity.class));
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_Logout) {
@@ -205,15 +205,7 @@ public class mainScreen_with_drawer extends AppCompatActivity
 
         @Override
         public void onBindViewHolder(SolventViewHolders holder, int position) {
-            /*************************************/
-            // Set the texts in the row
-         //   txtName.setText(this.getItem(position).Name);
-        //    txtDescription.setText(this.getItem(position).Description);
 
-       //     String Duration = timeFormat.format(this.getItem(position).StartDate) + " - " +
-       //             timeFormat.format(this.getItem(position).EndDate);
-        //    txtTime.setText(Duration);
-            /*************************************/
             EventInfo CurrEvent = itemList.get(position);
 
             holder.eventName.setText(CurrEvent.Name);
@@ -225,7 +217,6 @@ public class mainScreen_with_drawer extends AppCompatActivity
             timeFormat.format(CurrEvent.StartDate));
 
             holder.eventTypePhoto.setImageDrawable(getEventTypeImage(EventType, EventSecondaryType));
-            //holder.eventTypePhoto= getEventTypeImage(EventType, EventSecondaryType);
         }
 
         @Override
@@ -291,18 +282,14 @@ public class mainScreen_with_drawer extends AppCompatActivity
             case EVENT_TYPE_SPORT:
                 switch (EventInfo.eSportEventTypes.values()[eventSecondaryType]) {
                     case EVENT_TYPE_TENNIS:
-                        //imageView.setImageDrawable(R.drawable.tennis);
-                        //imageView.setImageDrawable(getDrawable(R.drawable.tennis));
                         drawable = getResources().getDrawable(R.drawable.tennis);
                         break;
                     case EVENT_TYPE_SWIMMING:
                         break;
                     case EVENT_TYPE_SOCCER:
-                       // imageView.setImageDrawable(getDrawable(R.drawable.soccer));
                         drawable = getResources().getDrawable(R.drawable.soccer);
                         break;
                     case EVENT_TYPE_GOLF:
-                    //    imageView.setImageDrawable(getDrawable(R.drawable.golf));
                         drawable = getResources().getDrawable(R.drawable.golf);
                         break;
                     case EVENT_TYPE_FOOTBALL:
@@ -313,15 +300,12 @@ public class mainScreen_with_drawer extends AppCompatActivity
             case EVENT_TYPE_SOCIAL:
                 switch (EventInfo.eSocialEventTypes.values()[eventSecondaryType]) {
                     case EVENT_TYPE_CLUB:
-                    //    imageView.setImageDrawable(getDrawable(R.drawable.meetme));
                         drawable = getResources().getDrawable(R.drawable.meetme);
                         break;
                     case EVENT_TYPE_HANGOUT:
-                     //   imageView.setImageDrawable(getDrawable(R.drawable.meetme));
                         drawable = getResources().getDrawable(R.drawable.meetme);
                         break;
                     case EVENT_TYPE_MEETING:
-                     //   imageView.setImageDrawable(getDrawable(R.drawable.meetme));
                         drawable = getResources().getDrawable(R.drawable.meetme);
                         break;
                 }
@@ -331,15 +315,12 @@ public class mainScreen_with_drawer extends AppCompatActivity
             case EVENT_TYPE_FOOD:
                 switch (EventInfo.eFoodEventTypes.values()[eventSecondaryType]) {
                     case EVENT_TYPE_DINNER:
-                  //      imageView.setImageDrawable(getDrawable(R.drawable.meetme));
                         drawable = getResources().getDrawable(R.drawable.meetme);
                         break;
                     case EVENT_TYPE_LUNCH:
-                  //      imageView.setImageDrawable(getDrawable(R.drawable.meetme));
                         drawable = getResources().getDrawable(R.drawable.meetme);
                         break;
                     case EVENT_TYPE_BREAKFAST:
-                  //      imageView.setImageDrawable(getDrawable(R.drawable.meetme));
                         drawable = getResources().getDrawable(R.drawable.meetme);
                         break;
                 }
