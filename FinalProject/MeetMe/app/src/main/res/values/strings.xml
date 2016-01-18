@@ -25,6 +25,7 @@
     <string name="edit_text_from_date">From Date</string>
     <string name="edit_text_event_name">Event Name</string>
     <string name="edit_text_event_descryption">Event Descryption</string>
+    <string name="edit_text_participation_cap">Participation Cap</string>
     <string name="edit_text_location">Location</string>
     <string name="spinner_recurrence">Recurrence</string>
     <string name="spinner_event_type">Event Type</string>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -85,7 +86,22 @@ public class mainScreen_with_drawer extends AppCompatActivity
         rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, gaggeredList);
         recyclerView.setAdapter(rcAdapter);
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main_screen_add_new_event);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddNewEvent();
+            }
+        });
         /******************************************************************/
+    }
+
+    private void AddNewEvent() {
+        // The floating action bar sends to add new event activity
+        Intent AddEventIntent = new Intent(getApplicationContext(),
+                AddNewEventActivity.class);
+        AddEventIntent.putExtra(AddNewEventActivity.EVENT_DATE, new Date().getTime());
+        startActivityForResult(AddEventIntent, AddNewEventActivity.ADD_EVENT_REQUEST);
     }
 
     @Override
@@ -133,8 +149,8 @@ public class mainScreen_with_drawer extends AppCompatActivity
             startActivity(new Intent(this, EventsCalendar.class));
         } else if (id == R.id.nav_slideshow) {
             startActivity(new Intent(this, FriendsScrollingActivity.class));
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_search_events) {
+            startActivity(new Intent(this, SearchEventsActivity.class));
         } else if (id == R.id.nav_Logout) {
             //     startActivity(new Intent(this, LoginActivityFragment.class));
             finish();
@@ -176,6 +192,10 @@ public class mainScreen_with_drawer extends AppCompatActivity
         public SolventRecyclerViewAdapter(Context context, List<EventInfo> itemList) {
             this.itemList = itemList;
             this.context = context;
+        }
+
+        public void insertNewItem(EventInfo NewEvent) {
+            itemList.add(NewEvent);
         }
 
         public EventInfo getItemAtPosition(int position) {
@@ -257,14 +277,17 @@ public class mainScreen_with_drawer extends AppCompatActivity
 
         if (resultCode == RESULT_OK) {
             switch(requestCode) {
-                case (DayViewer.ADD_EVENT_REQUEST) :
+                case (AddNewEventActivity.ADD_EVENT_REQUEST) :
+                    rcAdapter.insertNewItem((EventInfo)data.getExtras().getSerializable(
+                            AddNewEventActivity.EVENT_FINAL));
+                    rcAdapter.notifyDataSetChanged();
                     break;
-                case (DayViewer.UPDATE_EVENT_REQUEST) :
-                    if (data.getExtras().getBoolean(DayViewer.EVENT_REMOVED)) {
+                case (AddNewEventActivity.UPDATE_EVENT_REQUEST) :
+                    if (data.getExtras().getBoolean(AddNewEventActivity.EVENT_REMOVED)) {
                         rcAdapter.removeItemAtPosition(mCurrItemPosition);
                     } else {
                         rcAdapter.UpdateItemAtPosition(mCurrItemPosition,
-                                (EventInfo) data.getExtras().getSerializable(DayViewer.EVENT_FINAL));
+                                (EventInfo) data.getExtras().getSerializable(AddNewEventActivity.EVENT_FINAL));
                     }
 
                     rcAdapter.notifyItemChanged(mCurrItemPosition);
@@ -331,8 +354,8 @@ public class mainScreen_with_drawer extends AppCompatActivity
 
     private void EditEvent(EventInfo Event) {
         Intent EditEventIntent = new Intent(this, AddNewEventActivity.class);
-        EditEventIntent.putExtra(DayViewer.EVENT_INFO, Event);
-        startActivityForResult(EditEventIntent, DayViewer.UPDATE_EVENT_REQUEST);
+        EditEventIntent.putExtra(AddNewEventActivity.EVENT_INFO, Event);
+        startActivityForResult(EditEventIntent, AddNewEventActivity.UPDATE_EVENT_REQUEST);
     }
 
     @Override

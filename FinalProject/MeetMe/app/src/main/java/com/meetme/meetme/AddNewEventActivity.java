@@ -26,6 +26,13 @@ import java.util.TimeZone;
 public class AddNewEventActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
 
+    public static final String EVENT_INFO = "Event_Info";
+    public static final String EVENT_DATE = "Event_Date";
+    public static final String EVENT_FINAL = "Event_Final";
+    public static final String EVENT_REMOVED = "Event_Removed";
+    public static final int ADD_EVENT_REQUEST = 1;
+    public static final int UPDATE_EVENT_REQUEST = 2;
+
     Date mFromDate;
     Date mToDate;
     EventInfo mOldEvent = null;
@@ -54,7 +61,7 @@ public class AddNewEventActivity extends AppCompatActivity
         Date NewEventDate = null;
         super.onCreate(savedInstanceState);
 
-        Serializable Input = getIntent().getExtras().getSerializable(DayViewer.EVENT_INFO);
+        Serializable Input = getIntent().getExtras().getSerializable(EVENT_INFO);
 
         // Check if we were asked to modify an existing event
         if (Input != null) {
@@ -64,7 +71,7 @@ public class AddNewEventActivity extends AppCompatActivity
             IsUpdatingEvent = true;
             setContentView(R.layout.activity_modify_event);
         } else {
-            NewEventDate = new Date(getIntent().getExtras().getLong(DayViewer.EVENT_DATE));
+            NewEventDate = new Date(getIntent().getExtras().getLong(EVENT_DATE));
             mFromDate = new Date(NewEventDate.getTime());
             mToDate = new Date(NewEventDate.getTime());
             IsUpdatingEvent = false;
@@ -292,8 +299,8 @@ public class AddNewEventActivity extends AppCompatActivity
         }
 
         Intent ResultIntent = new Intent();
-        ResultIntent.putExtra(DayViewer.EVENT_FINAL, NewEvent);
-        ResultIntent.putExtra(DayViewer.EVENT_REMOVED, false);
+        ResultIntent.putExtra(EVENT_FINAL, NewEvent);
+        ResultIntent.putExtra(EVENT_REMOVED, false);
         setResult(RESULT_OK, ResultIntent);
 
         finish();
@@ -309,7 +316,7 @@ public class AddNewEventActivity extends AppCompatActivity
         finish();
 
         Intent ResultIntent = new Intent();
-        ResultIntent.putExtra(DayViewer.EVENT_REMOVED, true);
+        ResultIntent.putExtra(EVENT_REMOVED, true);
         setResult(RESULT_OK, ResultIntent);
     }
 }

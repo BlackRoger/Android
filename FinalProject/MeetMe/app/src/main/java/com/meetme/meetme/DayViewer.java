@@ -22,13 +22,6 @@ import java.util.List;
 
 public class DayViewer extends AppCompatActivity {
 
-    public static final String EVENT_INFO = "Event_Info";
-    public static final String EVENT_DATE = "Event_Date";
-    public static final String EVENT_FINAL = "Event_Final";
-    public static final String EVENT_REMOVED = "Event_Removed";
-    public static final int ADD_EVENT_REQUEST = 1;
-    public static final int UPDATE_EVENT_REQUEST = 2;
-
     private Date CurrDate;
     private int mCurrPosition;
     private DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -106,14 +99,14 @@ public class DayViewer extends AppCompatActivity {
         // The floating action bar sends to add new event activity
         Intent AddEventIntent = new Intent(getApplicationContext(),
                 AddNewEventActivity.class);
-        AddEventIntent.putExtra(EVENT_DATE, CurrDate.getTime());
-        startActivityForResult(AddEventIntent, ADD_EVENT_REQUEST);
+        AddEventIntent.putExtra(AddNewEventActivity.EVENT_DATE, CurrDate.getTime());
+        startActivityForResult(AddEventIntent, AddNewEventActivity.ADD_EVENT_REQUEST);
     }
 
     private void EditEvent(EventInfo Event) {
         Intent EditEventIntent = new Intent(this, AddNewEventActivity.class);
-        EditEventIntent.putExtra(EVENT_INFO, Event);
-        startActivityForResult(EditEventIntent, UPDATE_EVENT_REQUEST);
+        EditEventIntent.putExtra(AddNewEventActivity.EVENT_INFO, Event);
+        startActivityForResult(EditEventIntent, AddNewEventActivity.UPDATE_EVENT_REQUEST);
     }
 
     @Override
@@ -121,14 +114,14 @@ public class DayViewer extends AppCompatActivity {
 
         if (resultCode == RESULT_OK) {
             switch(requestCode) {
-                case (ADD_EVENT_REQUEST) :
-                    AddEventToSchedule((EventInfo)data.getExtras().getSerializable(EVENT_FINAL));
+                case (AddNewEventActivity.ADD_EVENT_REQUEST) :
+                    AddEventToSchedule((EventInfo)data.getExtras().getSerializable(AddNewEventActivity.EVENT_FINAL));
                     break;
-                case (UPDATE_EVENT_REQUEST) :
-                    if (data.getExtras().getBoolean(EVENT_REMOVED)) {
+                case (AddNewEventActivity.UPDATE_EVENT_REQUEST) :
+                    if (data.getExtras().getBoolean(AddNewEventActivity.EVENT_REMOVED)) {
                         RemoveCurrentEvent();
                     } else {
-                        UpdateCurrentEvent((EventInfo) data.getExtras().getSerializable(EVENT_FINAL));
+                        UpdateCurrentEvent((EventInfo) data.getExtras().getSerializable(AddNewEventActivity.EVENT_FINAL));
                     }
                     break;
             }

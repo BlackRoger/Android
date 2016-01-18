@@ -125,12 +125,11 @@ public class FriendList extends AppCompatActivity {
 
                 String userPictureLarge = "https://graph.facebook.com/"  + id + "/picture?type=large";
 
-
                 /*show picture*/
-                DownloadImageTask downloadImageTask = (DownloadImageTask) new DownloadImageTask((ImageView) findViewById(R.id.userPicture)).execute(userPictureLarge);
+                DownloadImageTask downloadImageTask = (DownloadImageTask) new DownloadImageTask(i).execute(userPictureLarge);
                 Bitmap bitmap = downloadImageTask.getBmImage();
 
-                listViewItems.add(new FriendsInfo(id, name, bitmap));
+                listViewItems.add(new FriendsInfo(id, name, null));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -138,16 +137,14 @@ public class FriendList extends AppCompatActivity {
 
         rcAdapter = new SolventRecyclerViewAdapter(FriendList.this, listViewItems);
         recyclerView.setAdapter(rcAdapter);
-
     }
 
-
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
+        int mPosition;
         Bitmap mIcon11;
 
-        public DownloadImageTask(ImageView bmImage) {
-          //  this.bmImage = bmImage;
+        public DownloadImageTask(int position) {
+            mPosition = position;
         }
 
         protected Bitmap doInBackground(String... urls) {
@@ -164,8 +161,10 @@ public class FriendList extends AppCompatActivity {
         }
 
         protected void onPostExecute(Bitmap result) {
-         //   bmImage.setImageBitmap(result);
+            ((SolventViewHolders)recyclerView.findViewHolderForAdapterPosition(mPosition)).
+                    UserPicture.setImageBitmap(result);
         }
+
         public Bitmap getBmImage(){
             return mIcon11;
         }
@@ -222,7 +221,9 @@ public class FriendList extends AppCompatActivity {
         @Override
         public void onBindViewHolder(SolventViewHolders holder, int position) {
             holder.name.setText(itemList.get(position).getName());
-            holder.UserPicture.setImageBitmap(itemList.get(position).getPhoto());
+
+            if (itemList.get(position).getPhoto() != null)
+                holder.UserPicture.setImageBitmap(itemList.get(position).getPhoto());
         }
 
         @Override
@@ -230,6 +231,7 @@ public class FriendList extends AppCompatActivity {
             return this.itemList.size();
         }
     }
+
     public class SolventViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 

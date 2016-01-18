@@ -10,6 +10,8 @@
             android:title="Slideshow" />
         <item android:id="@+id/nav_manage" android:icon="@android:drawable/ic_menu_manage"
             android:title="Tools" />
+        <item android:id="@+id/nav_search_events" android:icon="@android:drawable/ic_menu_manage"
+            android:title="Search For Events" />
     </group>
 
     <item android:title="Communicate">
