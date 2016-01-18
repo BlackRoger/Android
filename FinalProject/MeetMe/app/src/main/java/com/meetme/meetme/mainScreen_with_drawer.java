@@ -51,6 +51,8 @@ public class mainScreen_with_drawer extends AppCompatActivity
 
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
+    SolventRecyclerViewAdapter rcAdapter;
+    Integer mCurrItemPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,9 +80,8 @@ public class mainScreen_with_drawer extends AppCompatActivity
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
 
         List<EventInfo> gaggeredList = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
-        //List<ItemObjects> gaggeredList = getListItemData();
 
-        SolventRecyclerViewAdapter rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, gaggeredList);
+        rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, gaggeredList);
         recyclerView.setAdapter(rcAdapter);
 
         /******************************************************************/
@@ -176,6 +177,19 @@ public class mainScreen_with_drawer extends AppCompatActivity
             this.context = context;
         }
 
+        public EventInfo getItemAtPosition(int position) {
+            return itemList.get(position);
+        }
+
+        public void removeItemAtPosition(int position) {
+            itemList.remove(position);
+        }
+
+        public void UpdateItemAtPosition(int position, EventInfo NewEvent) {
+            itemList.remove(position);
+            itemList.add(position, NewEvent);
+        }
+
         @Override
         public SolventViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -232,34 +246,32 @@ public class mainScreen_with_drawer extends AppCompatActivity
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "Clicked Position = " + getPosition(), Toast.LENGTH_SHORT).show();
+            mCurrItemPosition = getPosition();
+            EventInfo event = ((SolventRecyclerViewAdapter)
+                    ((RecyclerView) view.getParent()).getAdapter()).getItemAtPosition(mCurrItemPosition);
+            EditEvent(event);
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    private List<ItemObjects> getListItemData() {
-        /****************/
-        Calendar c = Calendar.getInstance();
-        System.out.println("Current time =&gt; " + c.getTime());
+        if (resultCode == RESULT_OK) {
+            switch(requestCode) {
+                case (DayViewer.ADD_EVENT_REQUEST) :
+                    break;
+                case (DayViewer.UPDATE_EVENT_REQUEST) :
+                    if (data.getExtras().getBoolean(DayViewer.EVENT_REMOVED)) {
+                        rcAdapter.removeItemAtPosition(mCurrItemPosition);
+                    } else {
+                        rcAdapter.UpdateItemAtPosition(mCurrItemPosition,
+                                (EventInfo) data.getExtras().getSerializable(DayViewer.EVENT_FINAL));
+                    }
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = df.format(c.getTime());
-        // Now formattedDate have current date/time
-        Toast.makeText(this, formattedDate, Toast.LENGTH_SHORT).show();
-    //    List<EventInfo> list = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
-        // Date NewEventDate = new Date(DayViewer.EVENT_DATE);
-        // Date mFromDate = new Date(NewEventDate.getTime());
-        //    DataManager dataManager = new DataManager(null);
-        //  Date date = new Date(c.DATE);
-        //     dataManager.GetMyEventsByMonth(new Date());
-        /*****************/
-        List<ItemObjects> listViewItems = new ArrayList<ItemObjects>();
-        listViewItems.add(new ItemObjects("Alkane", R.drawable.meetme));
-        listViewItems.add(new ItemObjects("Ethane", R.drawable.meetme));
-        listViewItems.add(new ItemObjects("Alkyne", R.drawable.meetme));
-        listViewItems.add(new ItemObjects("Amide", R.drawable.meetme));
-
-        return listViewItems;
+                    rcAdapter.notifyItemChanged(mCurrItemPosition);
+                    break;
+            }
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -326,5 +338,11 @@ public class mainScreen_with_drawer extends AppCompatActivity
                 break;
         }
         return drawable;
+    }
+
+    private void EditEvent(EventInfo Event) {
+        Intent EditEventIntent = new Intent(this, AddNewEventActivity.class);
+        EditEventIntent.putExtra(DayViewer.EVENT_INFO, Event);
+        startActivityForResult(EditEventIntent, DayViewer.UPDATE_EVENT_REQUEST);
     }
 }
