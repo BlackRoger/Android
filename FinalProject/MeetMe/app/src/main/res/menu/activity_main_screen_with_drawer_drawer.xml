@@ -10,7 +10,7 @@
             android:title="Search For Events" />
     </group>
 
-    <item android:title="Communicate">
+    <item android:title="Profile">
         <menu>
             <item android:id="@+id/nav_Logout" android:icon="@android:drawable/ic_menu_close_clear_cancel"
                 android:title="Logout" />
