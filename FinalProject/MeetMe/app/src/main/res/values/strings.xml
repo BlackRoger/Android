@@ -11,7 +11,7 @@
     <string name="search_title">Search</string>
     <string name="search_hint">Search Friends</string>
     <string name="login1">"Create new Activities and manage a Schedule in a very easy way!"</string>
-    <string name="login3">Filter activities by type for your better results</string>
+    <string name="login3">Filter activities by type for better results</string>
     <string name="login2">Find what your friends are up to, and join their mutual activities</string>
 
 
@@ -68,7 +68,7 @@
         <item>Other</item>
         <item>Football</item>
         <item>Soccer</item>
-        <item>Tenis</item>
+        <item>Tennis</item>
         <item>Golf</item>
         <item>Swimming</item>
     </string-array>

@@ -317,6 +317,9 @@ public class mainScreen_with_drawer extends AppCompatActivity
                     case EVENT_TYPE_FOOTBALL:
                         drawable = getResources().getDrawable(R.drawable.football);
                         break;
+                    default:
+                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        break;
                 }
                 break;
             case EVENT_TYPE_SOCIAL:
@@ -330,9 +333,10 @@ public class mainScreen_with_drawer extends AppCompatActivity
                     case EVENT_TYPE_MEETING:
                         drawable = getResources().getDrawable(R.drawable.meeting);
                         break;
+                    default:
+                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        break;
                 }
-                break;
-            case EVENT_TYPE_OTHER:
                 break;
             case EVENT_TYPE_FOOD:
                 switch (EventInfo.eFoodEventTypes.values()[eventSecondaryType]) {
@@ -345,7 +349,16 @@ public class mainScreen_with_drawer extends AppCompatActivity
                     case EVENT_TYPE_BREAKFAST:
                         drawable = getResources().getDrawable(R.drawable.breakfast);
                         break;
+                    default:
+                        drawable = getResources().getDrawable(R.drawable.meetme);
+                        break;
                 }
+                break;
+            case EVENT_TYPE_OTHER:
+                drawable = getResources().getDrawable(R.drawable.meetme);
+                break;
+            default:
+                drawable = getResources().getDrawable(R.drawable.meetme);
                 break;
         }
         return drawable;
