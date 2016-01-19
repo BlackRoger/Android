@@ -104,7 +104,7 @@
             android:layout_weight="1"
             android:id="@+id/button_search"
             android:onClick="button_search"
-            android:text="@string/button_add_event"/>
+            android:text="@string/button_search"/>
 
         <Button
             android:layout_width="wrap_content"

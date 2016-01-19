@@ -61,16 +61,19 @@
             android:theme="@style/AppTheme" >
         </activity>
         <activity
+            android:label="@string/title_activity_new_event"
             android:name=".AddNewEventActivity"
             android:layoutDirection="ltr"
             android:theme="@style/AppTheme" >
         </activity>
 
         <activity android:name=".SearchEventsActivity"
+            android:label="@string/title_activity_find_events"
             android:theme="@style/AppTheme"
             android:layoutDirection="ltr">
         </activity>
         <activity
+            android:label="@string/title_activity_day_viewer"
             android:name=".DayViewer"
             android:layoutDirection="ltr"
             android:theme="@style/AppTheme" >
