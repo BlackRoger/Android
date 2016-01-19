@@ -4,6 +4,7 @@
     android:id="@+id/card_view"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="#354B51"
     android:layout_marginBottom="16dp"
     card_view:cardCornerRadius="8dp"
     card_view:cardUseCompatPadding="true">
@@ -18,7 +19,7 @@
             android:id="@+id/userName1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#1976D2"
+            android:background="#7396BC"
             android:gravity="center_horizontal"
             android:paddingTop="8dp"
             android:text=""
@@ -27,7 +28,7 @@
         <ImageView
             android:id="@+id/userPicture"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="@dimen/com_facebook_profilepictureview_preset_size_large"
             android:contentDescription="@string/action_settings"
             android:scaleType="centerCrop" />
 

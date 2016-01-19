@@ -176,7 +176,7 @@ public class mainScreen_with_drawer extends AppCompatActivity
 
             TextView textView = (TextView) headerView.findViewById(R.id.userName);
             if (textView != null)
-                textView.setText("welcome " + profile.getName());
+                textView.setText("Welcome " + profile.getName());
 
 
         }

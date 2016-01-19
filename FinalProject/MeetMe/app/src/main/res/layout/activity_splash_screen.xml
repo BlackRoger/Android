@@ -8,14 +8,13 @@
 
     <ImageView
         android:id="@+id/splashscreen"
-        android:layout_width="match_parent"
-        android:layout_height="560dp"
-        android:layout_gravity="center"
-        android:src="@drawable/main_screen" />
+        android:layout_width="372dp"
+        android:layout_height="550dp"
+        android:src="@drawable/main_screen2" />
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="106dp"
         android:text="Version Number: 1.0.0" />
 
 </LinearLayout>

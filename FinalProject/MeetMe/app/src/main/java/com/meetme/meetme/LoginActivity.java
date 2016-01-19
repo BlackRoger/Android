@@ -3,15 +3,22 @@ package com.meetme.meetme;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.Profile;
@@ -21,7 +28,9 @@ import com.parse.ParseObject;
 
 public class LoginActivity extends AppCompatActivity implements LoginActivityFragment.LoginListener {
 
-    private Toolbar toolbar;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+
     boolean bFirstTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +49,11 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
         testObject.put("foo", "bar");
         testObject.saveInBackground();
         */
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
     }
 
     @Override
@@ -61,7 +75,7 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
             return true;
         }
         if (id == R.id.menu){
-           // startActivity(new Intent(this, mainScreen_with_drawer.class));
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -76,14 +90,6 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
             bFirstTime = false;
         } else {
             addButton();
-
-           /* Button btn= new Button(this);
-            btn.setText("Submit");
-            btn.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    //your write code
-                }
-            }); */
         }
     }
 
@@ -98,5 +104,90 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
             DataManager.getInstance(this).SetMyInfo(profile.getName());
 
         startActivity(new Intent(this, mainScreen_with_drawer.class));
+    }
+
+    /********************************************************************/
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return PlaceholderFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "SECTION 1";
+                case 1:
+                    return "SECTION 2";
+                case 2:
+                    return "SECTION 3";
+            }
+            return null;
+        }
+    }
+
+    /**
+     * A placeholder fragment containing a simple view.
+     */
+    public static class PlaceholderFragment extends Fragment {
+        /**
+         * The fragment argument representing the section number for this
+         * fragment.
+         */
+        private static final String ARG_SECTION_NUMBER = "section_number";
+
+        /**
+         * Returns a new instance of this fragment for the given section
+         * number.
+         */
+        public static PlaceholderFragment newInstance(int sectionNumber) {
+            PlaceholderFragment fragment = new PlaceholderFragment();
+            Bundle args = new Bundle();
+            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        public PlaceholderFragment() {
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.tabbed_layout, container, false);
+            ImageView imageView = (ImageView) rootView.findViewById(R.id.imageView);
+            TextView textView = (TextView) rootView.findViewById(R.id.login_text);
+           // textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            switch (getArguments().getInt(ARG_SECTION_NUMBER)){
+                case 1:
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.login1));
+                    textView.setText(R.string.login1);
+                    break;
+                case 2:
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.login2));
+                    textView.setText(R.string.login2);
+                    break;
+                case 3:
+                    imageView.setImageDrawable(getResources().getDrawable(R.drawable.login3));
+                    textView.setText(R.string.login3);
+                    break;
+            }
+
+            return rootView;
+        }
     }
 }
