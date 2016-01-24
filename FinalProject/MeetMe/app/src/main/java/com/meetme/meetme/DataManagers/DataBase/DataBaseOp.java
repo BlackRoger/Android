@@ -22,9 +22,10 @@ public class DataBaseOp extends SQLiteOpenHelper {
     private static final String OR_SEP = " OR ";
     private static final String TEXT_TYPE = " TEXT";
     private static final String INT_TYPE = " INTEGER";
+    private static final String LEGACY_EVENT_TABLE = "Event_Table";
 
     private static final String DATABASE_NAME = "Client_DB";
-    public static final int database_version = 3;
+    public static final int database_version = 4;
 
     private static final String CREATE_EVENT_TABLE_QUERY = "create table " +
             EventTable.EventInfo.TABLE_NAME + "(" +
@@ -39,7 +40,7 @@ public class DataBaseOp extends SQLiteOpenHelper {
             EventTable.EventInfo.START_DATE + INT_TYPE + COMMA_SEP +
             EventTable.EventInfo.END_DATE + INT_TYPE + COMMA_SEP +
             EventTable.EventInfo.LOCATION + TEXT_TYPE + COMMA_SEP +
-            EventTable.EventInfo.SECONDARY_ID + INT_TYPE + ");";
+            EventTable.EventInfo.SECONDARY_ID + TEXT_TYPE + ");";
 
     private static final String CREATE_USER_TABLE_QUERY = "create table " +
             UserTable.UserInfo.TABLE_NAME + "(" +
@@ -62,6 +63,9 @@ public class DataBaseOp extends SQLiteOpenHelper {
     private static final String DELETE_PARTICIPATION_TABLE = "drop table " +
             ParticipationTable.ParticipationInfo.TABLE_NAME + ";";
 
+    private static final String DELETE_LEGACY_TABLE = "drop table " +
+            LEGACY_EVENT_TABLE + ";";
+
     public DataBaseOp(Context context){
         super(context, DATABASE_NAME, null, database_version);
         Log.d(" dataBase operations", "dataBase created");
@@ -77,9 +81,21 @@ public class DataBaseOp extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade (SQLiteDatabase arg0, int arg1, int arg2){
-        arg0.execSQL(DELETE_PARTICIPATION_TABLE);
-        arg0.execSQL(DELETE_EVENT_TABLE);
-        arg0.execSQL(DELETE_USER_TABLE);
+        try {
+            arg0.execSQL(DELETE_PARTICIPATION_TABLE);
+        } catch (Exception e) {}
+
+        try {
+            arg0.execSQL(DELETE_EVENT_TABLE);
+        } catch (Exception e) {}
+
+        try {
+            arg0.execSQL(DELETE_USER_TABLE);
+        } catch (Exception e) {}
+
+        try {
+            arg0.execSQL(DELETE_LEGACY_TABLE);
+        } catch (Exception e) {}
 
         arg0.execSQL(CREATE_USER_TABLE_QUERY);
         arg0.execSQL(CREATE_EVENT_TABLE_QUERY);
@@ -190,11 +206,11 @@ public class DataBaseOp extends SQLiteOpenHelper {
         while (!cr.isAfterLast())
         {
             EventInfo currEvent = new EventInfo(cr.getString(0), cr.getString(1),
-                    cr.getInt(2), cr.getInt(3),
+                    cr.getString(2), cr.getInt(3),
                     cr.getLong(4), cr.getLong(5),
                     EventInfo.eEventTypes.values()[cr.getInt(6)], cr.getInt(7),
                     EventInfo.eReccurence.values()[cr.getInt(8)], cr.getString(9),
-                    cr.getInt(10), cr.getLong(11));
+                    cr.getString(10), cr.getLong(11));
 
             EventsList.add(currEvent);
             cr.moveToNext();

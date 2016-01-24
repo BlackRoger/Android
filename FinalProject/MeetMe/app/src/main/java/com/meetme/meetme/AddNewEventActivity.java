@@ -14,13 +14,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.facebook.Profile;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
 import com.meetme.meetme.DataManagers.DataManager;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 public class AddNewEventActivity extends AppCompatActivity
@@ -289,8 +294,8 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.StartDate = mFromDate.getTime();
         NewEvent.EndDate = mToDate.getTime();
         NewEvent.Recurrence = EventInfo.eReccurence.values()[spnRecurrenceSpinner.getSelectedItemPosition()];
-        NewEvent.OrganizerId = 0;//DataManager.getInstance(this).GetMyInfo().SecondaryId;
-        NewEvent.SecondaryId = 0;
+        NewEvent.OrganizerId = Profile.getCurrentProfile().getId().toString();//DataManager.getInstance(this).GetMyInfo().SecondaryId;
+        NewEvent.SecondaryId = "";
 
         if (IsUpdatingEvent) {
             DataManager.getInstance(this).UpdateEvent(mOldEvent, NewEvent);
@@ -312,7 +317,7 @@ public class AddNewEventActivity extends AppCompatActivity
     }
 
     public void button_on_click_remove(View view) {
-        DataManager.getInstance(this).RemoveEvent(mOldEvent.Id);
+        DataManager.getInstance(this).RemoveEvent(mOldEvent);
         finish();
 
         Intent ResultIntent = new Intent();

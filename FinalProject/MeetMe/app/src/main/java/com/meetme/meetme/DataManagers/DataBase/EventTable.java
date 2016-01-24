@@ -8,7 +8,7 @@ import android.provider.BaseColumns;
 public class EventTable {
 
     public static abstract class EventInfo implements BaseColumns {
-        public static final String TABLE_NAME = "Event_Table";
+        public static final String TABLE_NAME = "EventInfo";
         public static final String NAME = "Name";
         public static final String DESCRIPTION = "Description";
         public static final String ORGANIZER = "Organizer";
