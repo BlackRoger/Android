@@ -38,17 +38,17 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
         setContentView(R.layout.activity_login);
         bFirstTime = true;
 
-        /*
+
         Parse.enableLocalDatastore(this);
 
         Parse.initialize(this);
   //      toolbar = (Toolbar) findViewById(R.id.app_bar);
   //      setSupportActionBar(toolbar);
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
+      /*  ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "zzzzz");
         testObject.saveInBackground();
-        */
+*/
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.

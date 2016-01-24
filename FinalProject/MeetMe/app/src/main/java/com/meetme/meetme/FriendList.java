@@ -208,8 +208,13 @@ public class FriendList extends AppCompatActivity {
         public SolventRecyclerViewAdapter(Context context, List<FriendsInfo> itemList) {
             this.itemList = itemList;
             this.context = context;
+
+
         }
 
+        public FriendsInfo getItemAtPosition(int position) {
+            return itemList.get(position);
+        }
         @Override
         public SolventViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -248,41 +253,12 @@ public class FriendList extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "Clicked Position = " + getPosition(), Toast.LENGTH_SHORT).show();
+            mCurrItemPosition = getPosition();
+            FriendsInfo friend = ((SolventRecyclerViewAdapter)
+                    ((RecyclerView) view.getParent()).getAdapter()).getItemAtPosition(mCurrItemPosition);
+            Toast.makeText(view.getContext(), "Friend ID = " + friend.id, Toast.LENGTH_SHORT).show();
         }
     }
-
-
-
-/*
-    private void onSessionStateChange(PackageInstaller.Session session, SessionState state,
-                                      Exception exception) {
-        if (session.isOpened()) {
-            LoginClient.Request.newMeRequest(session, new LoginClient.Request.GraphUserCallback() {
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        try {
-                            URL imgUrl = new URL("http://graph.facebook.com/"
-                                    + user.getId() + "/picture?type=large");
-
-                            InputStream in = (InputStream) imgUrl.getContent();
-                            Bitmap bitmap = BitmapFactory.decodeStream(in);
-                            //Bitmap bitmap = BitmapFactory.decodeStream(imgUrl      // tried this also
-                            //.openConnection().getInputStream());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }).executeAsync();
-        }
-    }
-
-
-*/
-
-
 
 }
 
