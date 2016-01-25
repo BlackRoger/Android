@@ -3,6 +3,7 @@ package com.meetme.meetme;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -60,12 +61,11 @@ public class AddNewEventActivity extends AppCompatActivity
     Spinner spnRecurrenceSpinner;
     Spinner spnEventTypeSpinner;
     Spinner spnEventSubtypeSpinner;
-
+    SharedPreferences EventIdpref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Date NewEventDate = null;
         super.onCreate(savedInstanceState);
-
         Serializable Input = getIntent().getExtras().getSerializable(EVENT_INFO);
 
         // Check if we were asked to modify an existing event
@@ -295,8 +295,17 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.StartDate = mFromDate.getTime();
         NewEvent.EndDate = mToDate.getTime();
         NewEvent.Recurrence = EventInfo.eReccurence.values()[spnRecurrenceSpinner.getSelectedItemPosition()];
-        NewEvent.OrganizerId = Profile.getCurrentProfile().getId().toString();//DataManager.getInstance(this).GetMyInfo().SecondaryId;
-        NewEvent.SecondaryId = "";
+        NewEvent.OrganizerId = Profile.getCurrentProfile().getId().toString();
+
+        /* add event id and increase it*/
+        EventIdpref = getPreferences(MODE_PRIVATE);
+        int EventId=EventIdpref.getInt("EVENT_ID", 0);
+        EventId++;
+        SharedPreferences.Editor editor = EventIdpref.edit();
+        editor.putInt("EVENT_ID", EventId);
+        editor.commit();
+
+        NewEvent.SecondaryId = EventId + "";
 
         if (IsUpdatingEvent) {
             DataManager.getInstance(this).UpdateEvent(NewEvent);

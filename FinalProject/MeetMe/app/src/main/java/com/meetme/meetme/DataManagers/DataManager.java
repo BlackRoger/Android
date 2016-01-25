@@ -1,11 +1,16 @@
 package com.meetme.meetme.DataManagers;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
 
 import com.meetme.meetme.DataManagers.DataBase.DataBaseOp;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
 import com.meetme.meetme.DataManagers.DataBase.EventTable;
 import com.meetme.meetme.DataManagers.DataBase.UserInfo;
+import com.meetme.meetme.FriendList;
+import com.meetme.meetme.FriendsActivity;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.Parse;
@@ -19,9 +24,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Guy on 09-Jan-16.
- */
+import static android.support.v4.app.ActivityCompat.startActivity;
+
+
 public class DataManager {
     private static DataManager mInstance;
     private DataBaseOp mDb;
