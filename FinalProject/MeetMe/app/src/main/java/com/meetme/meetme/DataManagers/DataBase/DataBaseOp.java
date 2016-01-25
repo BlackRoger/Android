@@ -25,7 +25,7 @@ public class DataBaseOp extends SQLiteOpenHelper {
     private static final String LEGACY_EVENT_TABLE = "Event_Table";
 
     private static final String DATABASE_NAME = "Client_DB";
-    public static final int database_version = 17;
+    public static final int database_version = 18;
 
     private static final String CREATE_EVENT_TABLE_QUERY = "create table " +
             EventTable.EventInfo.TABLE_NAME + "(" +
