@@ -272,6 +272,10 @@ public class FriendsActivity extends AppCompatActivity {
     private void EditEvent(EventInfo Event) {
         Intent EditEventIntent = new Intent(this, AddNewEventActivity.class);
         EditEventIntent.putExtra(AddNewEventActivity.EVENT_INFO, Event);
-        startActivityForResult(EditEventIntent, AddNewEventActivity.UPDATE_EVENT_REQUEST);
+        Bundle b = new Bundle();
+        b.putString("requestType", "Join");
+       // EditEventIntent.putExtra(AddNewEventActivity.EVENT_INFO, Event);
+        EditEventIntent.putExtras(b);
+        startActivityForResult(EditEventIntent, AddNewEventActivity.ADD_EVENT_REQUEST);
     }
 }

@@ -41,6 +41,7 @@
     <string name="button_search">Search</string>
     <string name="button_clear">Clear All</string>
     <string name="button_modify_event">Update</string>
+    <string name="button_join_event">Join</string>
     <string name="button_cancel_event">Cancel</string>
     <string name="button_remove_event">Remove</string>
     <string name="text_view_recurrence">Recurrence</string>
