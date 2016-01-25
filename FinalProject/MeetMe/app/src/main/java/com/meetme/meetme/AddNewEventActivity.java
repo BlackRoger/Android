@@ -325,12 +325,18 @@ public class AddNewEventActivity extends AppCompatActivity
 
         NewEvent.SecondaryId = EventId + "";
 
-        if (IsUpdatingEvent) {
-            DataManager.getInstance(this).UpdateEvent(NewEvent);
-        } else {
+        if (IsJoinEvent) {
             DataManager.getInstance(this).AddEvent(NewEvent);
+            Toast.makeText(getApplicationContext(),
+                    "You have joined the event! ",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            if (IsUpdatingEvent) {
+                DataManager.getInstance(this).UpdateEvent(NewEvent);
+            } else {
+                DataManager.getInstance(this).AddEvent(NewEvent);
+            }
         }
-
         Intent ResultIntent = new Intent();
         ResultIntent.putExtra(EVENT_FINAL, NewEvent);
         ResultIntent.putExtra(EVENT_REMOVED, false);
