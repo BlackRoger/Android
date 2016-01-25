@@ -143,42 +143,14 @@ public class SearchEventsActivity extends AppCompatActivity
         // Another interface callback
     }
 
-    public void button_on_click_confirm(View view) {
-        /*
-        EventInfo NewEvent = new EventInfo();
-        NewEvent.Name = txtName.getText().toString();
-        NewEvent.Description = txtDescryption.getText().toString();
-        NewEvent.Location = txtLocation.getText().toString();
-        NewEvent.ParticipationCap = Integer.valueOf(txtParticipationCap.getText().toString());
-        NewEvent.EventType = EventInfo.eEventTypes.values()[spnEventTypeSpinner.getSelectedItemPosition()];
-        NewEvent.EventSecondaryType = spnEventSubtypeSpinner.getSelectedItemPosition();
-        NewEvent.StartDate = mFromDate.getTime();
-        NewEvent.EndDate = mToDate.getTime();
-        NewEvent.Recurrence = EventInfo.eReccurence.values()[spnRecurrenceSpinner.getSelectedItemPosition()];
-        NewEvent.OrganizerId = 0;//DataManager.getInstance(this).GetMyInfo().SecondaryId;
-        NewEvent.SecondaryId = 0;
-
-        if (IsUpdatingEvent) {
-            DataManager.getInstance(this).UpdateEvent(mOldEvent, NewEvent);
-        } else {
-            DataManager.getInstance(this).AddEvent(NewEvent);
-        }
-
-        Intent ResultIntent = new Intent();
-        ResultIntent.putExtra(DayViewer.EVENT_FINAL, NewEvent);
-        ResultIntent.putExtra(DayViewer.EVENT_REMOVED, false);
-        setResult(RESULT_OK, ResultIntent);
-
-        finish();
-        */
+    public void button_search(View view) {
+        //DataManager.getInstance(this).FindEventByFriend()
     }
 
-    public void button_on_click_cancel(View view) {
-        setResult(RESULT_CANCELED, null);
-        finish();
-    }
-
-    public void button_on_click_remove(View view) {
-
+    public void button_clear(View view) {
+        chkEventType.setChecked(false);
+        chkLocation.setChecked(false);
+        chkName.setChecked(false);
+        chkSubType.setChecked(false);
     }
 }

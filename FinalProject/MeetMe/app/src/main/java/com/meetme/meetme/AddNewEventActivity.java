@@ -285,6 +285,7 @@ public class AddNewEventActivity extends AppCompatActivity
 
     public void button_on_click_confirm(View view) {
         EventInfo NewEvent = new EventInfo();
+        NewEvent.Id = mOldEvent.Id;
         NewEvent.Name = txtName.getText().toString();
         NewEvent.Description = txtDescryption.getText().toString();
         NewEvent.Location = txtLocation.getText().toString();
@@ -298,7 +299,7 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.SecondaryId = "";
 
         if (IsUpdatingEvent) {
-            DataManager.getInstance(this).UpdateEvent(mOldEvent, NewEvent);
+            DataManager.getInstance(this).UpdateEvent(NewEvent);
         } else {
             DataManager.getInstance(this).AddEvent(NewEvent);
         }

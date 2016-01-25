@@ -28,6 +28,10 @@ public class DataManager {
     private EventInfo tmpEvent;
     private List<EventInfo> mReceivedEvents;
 
+    public interface EventsReady {
+        public void GetEvents(List<EventInfo> Events);
+    }
+
     public DataManager(Context context) {
         mDb = new DataBaseOp(context);
         ParseObject.registerSubclass(EventInfo.class);
@@ -111,26 +115,39 @@ public class DataManager {
         });
     }
 
-    public void UpdateEvent(EventInfo OldEvent, EventInfo NewEvent) {
+    public void UpdateEvent(EventInfo NewEvent) {
+        EventInfo OldEvent = mDb.FindEventById(NewEvent.Id);
+        NewEvent.SecondaryId = OldEvent.SecondaryId;
         mDb.UpdateEvent(OldEvent, NewEvent);
-        tmpEvent = NewEvent;
+
+        NewEvent.setObjectId(OldEvent.SecondaryId);
         NewEvent.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                tmpEvent.SecondaryId = tmpEvent.getObjectId();
-                mDb.UpdateEvent(tmpEvent, tmpEvent);
             }
         });
     }
 
-    public void RemoveEvent(EventInfo EventId) {
-        mDb.RemoveEvent(EventId.Id);
-        EventId.deleteEventually();
+    public void RemoveEvent(EventInfo Event) {
+        // Our copy of the event may not have had its SecondaryId initialized, so get it
+        EventInfo tmpEvent = mDb.FindEventById(Event.Id);
+
+        mDb.RemoveEvent(Event.Id);
+        tmpEvent.setObjectId(tmpEvent.SecondaryId);
+        tmpEvent.deleteInBackground();
     }
 
-    public List<EventInfo> FindEventByFriend(String FriendId) {
+    public void FindEventByFriend(String FriendId, final EventsReady Callback) {
+        FindEventByFilter(new String[] {EventTable.EventInfo.ORGANIZER}, new Object[] {FriendId},
+                Callback);
+    }
+
+    public void FindEventByFilter(String Columns[], Object Values[], final EventsReady Callback) {
         final ParseQuery<ParseObject> query = ParseQuery.getQuery(EventTable.EventInfo.TABLE_NAME);
-        query.whereEqualTo(EventTable.EventInfo.ORGANIZER, FriendId);
+
+        for (int i = 0; i < Columns.length; i++) {
+            query.whereEqualTo(Columns[i], Values[i]);
+        }
         mReceivedEvents = new ArrayList<EventInfo>();
 
         // Retrieve the object by id
@@ -155,15 +172,9 @@ public class DataManager {
                     }
                 }
 
-                query.notify();
+                Callback.GetEvents(mReceivedEvents);
             }
         });
-
-        try {
-            query.wait();
-        } catch (Exception e) {}
-
-        return mReceivedEvents;
     }
 }
 
