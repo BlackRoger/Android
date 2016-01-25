@@ -111,11 +111,13 @@ public class mainScreen_with_drawer extends AppCompatActivity
 
     public void GetEvents(List<EventInfo> Events) {
         if (Events.size() == 0){
-            TextView textView = (TextView) findViewById(R.id.message);
-            textView.setText(R.string.noActivity);
+            //TextView textView = (TextView) findViewById(R.id.message);
+            //textView.setText(R.string.noActivity);
+            return;
         }
-        rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, Events);
-        recyclerView.setAdapter(rcAdapter);
+
+        rcAdapter.UpdateList(Events);
+        rcAdapter.notifyDataSetChanged();
     }
 
     private void GetActivities(String friend_id) {

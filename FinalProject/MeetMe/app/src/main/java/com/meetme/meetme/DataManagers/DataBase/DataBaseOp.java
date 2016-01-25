@@ -25,7 +25,7 @@ public class DataBaseOp extends SQLiteOpenHelper {
     private static final String LEGACY_EVENT_TABLE = "Event_Table";
 
     private static final String DATABASE_NAME = "Client_DB";
-    public static final int database_version = 4;
+    public static final int database_version = 18;
 
     private static final String CREATE_EVENT_TABLE_QUERY = "create table " +
             EventTable.EventInfo.TABLE_NAME + "(" +
@@ -66,9 +66,14 @@ public class DataBaseOp extends SQLiteOpenHelper {
     private static final String DELETE_LEGACY_TABLE = "drop table " +
             LEGACY_EVENT_TABLE + ";";
 
+    public boolean WasDbJustCreated = false;
+
     public DataBaseOp(Context context){
         super(context, DATABASE_NAME, null, database_version);
         Log.d(" dataBase operations", "dataBase created");
+
+        // Check whether the DB needs creation
+        SQLiteDatabase SQ = this.getReadableDatabase();
     }
 
     @Override
@@ -77,6 +82,8 @@ public class DataBaseOp extends SQLiteOpenHelper {
         sdb.execSQL(CREATE_USER_TABLE_QUERY);
         sdb.execSQL(CREATE_EVENT_TABLE_QUERY);
         sdb.execSQL(CREATE_PARTICIPATION_TABLE_QUERY);
+
+        WasDbJustCreated = true;
     }
 
     @Override
@@ -100,6 +107,8 @@ public class DataBaseOp extends SQLiteOpenHelper {
         arg0.execSQL(CREATE_USER_TABLE_QUERY);
         arg0.execSQL(CREATE_EVENT_TABLE_QUERY);
         arg0.execSQL(CREATE_PARTICIPATION_TABLE_QUERY);
+
+        WasDbJustCreated = true;
     }
 
     public void AddUser(UserInfo User){

@@ -96,7 +96,7 @@ public class SearchEventsActivity extends AppCompatActivity
         if (ViewId.intValue() == EventViewId.intValue()) {
             EventInfo.eEventTypes types[] = EventInfo.eEventTypes.values();
             UpdateSubtypeSpinner(types[pos]);
-            chkSubType.setChecked(false);
+            IgnoreNextEventSelection = true;
         } else {
             chkSubType.setChecked(true);
         }
@@ -172,7 +172,6 @@ public class SearchEventsActivity extends AppCompatActivity
 
     public void button_clear(View view) {
         chkEventType.setChecked(false);
-        chkLocation.setChecked(false);
         chkName.setChecked(false);
         chkSubType.setChecked(false);
 
