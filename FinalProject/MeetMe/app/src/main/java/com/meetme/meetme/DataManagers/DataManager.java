@@ -151,12 +151,18 @@ public class DataManager {
     public void FindEventByFilter(String Columns[], Object Values[], final EventsReady Callback,
                                   boolean IncludesMe) {
         final ParseQuery<ParseObject> query = ParseQuery.getQuery(EventTable.EventInfo.TABLE_NAME);
+        boolean WasFriendSpecified = false;
 
         for (int i = 0; i < Columns.length; i++) {
+            // Was a specific friend specified?
+            if (Columns[i] == EventTable.EventInfo.ORGANIZER)
+                WasFriendSpecified = true;
+
             query.whereEqualTo(Columns[i], Values[i]);
         }
 
-        if (!IncludesMe) {
+        // If a friend was not specified, show all events or all events but my own?
+        if (!IncludesMe && !WasFriendSpecified) {
             query.whereNotEqualTo(EventTable.EventInfo.ORGANIZER,
                     Profile.getCurrentProfile().getId().toString());
         }
