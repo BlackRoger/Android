@@ -119,7 +119,7 @@ public class mainScreen_with_drawer extends AppCompatActivity
     }
 
     private void GetActivities(String friend_id) {
-        DataManager.getInstance(getBaseContext()).FindEventByFriend(friend_id, this);
+        DataManager.getInstance(getBaseContext()).FindEventByFriend(friend_id, this, true);
     }
 
     private void AddNewEvent() {

@@ -92,10 +92,6 @@ public class FriendList extends AppCompatActivity {
         parameters.putString("fields", "picture, name");
         request.setParameters(parameters);
         request.executeAsync();
-
-
-
-
     }
 /*
     @Override

@@ -5,6 +5,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.TimeZone;
 
 public class SearchEventsActivity extends AppCompatActivity
-        implements AdapterView.OnItemSelectedListener {
+        implements AdapterView.OnItemSelectedListener, View.OnClickListener {
 
     /*
     Date ToDate;
@@ -52,6 +53,8 @@ public class SearchEventsActivity extends AppCompatActivity
         Date NewEventDate = null;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_events);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         IgnoreNextEventSelection = true;
         // mCalendar.setTimeZone(TimeZone.getDefault());
@@ -61,7 +64,6 @@ public class SearchEventsActivity extends AppCompatActivity
         spnEventSubtypeSpinner  = (Spinner) findViewById(R.id.spinner_event_sub_type);
         spnEventTypeSpinner     = (Spinner) findViewById(R.id.spinner_event_type);
         chkName                 = (CheckBox)findViewById(R.id.check_box_name);
-        chkLocation             = (CheckBox)findViewById(R.id.check_box_near_me);
         chkEventType            = (CheckBox)findViewById(R.id.check_box_event_type);
         chkSubType              = (CheckBox)findViewById(R.id.check_box_event_sub_type);
 
@@ -74,6 +76,8 @@ public class SearchEventsActivity extends AppCompatActivity
         spnEventTypeSpinner.setAdapter(EventTypeAdapter);
         spnEventTypeSpinner.setSelection(0);
         spnEventTypeSpinner.setOnItemSelectedListener(this);
+        spnEventSubtypeSpinner.setOnItemSelectedListener(this);
+        txtName.setOnClickListener(this);
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -92,6 +96,9 @@ public class SearchEventsActivity extends AppCompatActivity
         if (ViewId.intValue() == EventViewId.intValue()) {
             EventInfo.eEventTypes types[] = EventInfo.eEventTypes.values();
             UpdateSubtypeSpinner(types[pos]);
+            chkSubType.setChecked(false);
+        } else {
+            chkSubType.setChecked(true);
         }
     }
 
@@ -126,9 +133,14 @@ public class SearchEventsActivity extends AppCompatActivity
 
         EventSubtypeSpinner.setEnabled(true);
         EventSubtypeSpinner.setClickable(true);
+        chkEventType.setChecked(true);
     }
 
-    public void onNothingSelected(AdapterView<?> parent) {
+    public void onClick(View view) {
+        chkName.setChecked(true);
+    }
+
+        public void onNothingSelected(AdapterView<?> parent) {
         // Another interface callback
     }
 

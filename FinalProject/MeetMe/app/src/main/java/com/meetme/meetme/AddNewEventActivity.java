@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -70,6 +71,7 @@ public class AddNewEventActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         Date NewEventDate = null;
         super.onCreate(savedInstanceState);
+
         Serializable Input = getIntent().getExtras().getSerializable(EVENT_INFO);
 
         Bundle b = getIntent().getExtras();
@@ -101,6 +103,10 @@ public class AddNewEventActivity extends AppCompatActivity
                 setContentView(R.layout.activity_add_new_event);
             }
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        
         IgnoreNextEventSelection = true;
         mCalendar.setTimeZone(TimeZone.getDefault());
 
