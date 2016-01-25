@@ -399,10 +399,10 @@ public class mainScreen_with_drawer extends AppCompatActivity
     {
         super.onResume();
 
-      /*  List<EventInfo> gaggeredList = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
+        List<EventInfo> gaggeredList = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
         rcAdapter.UpdateList(gaggeredList);
         rcAdapter.notifyDataSetChanged();
-        String profile_id = Profile.getCurrentProfile().getId().toString();
+   /*     String profile_id = Profile.getCurrentProfile().getId().toString();
         new GetActivities().execute(profile_id);
         dialog = ProgressDialog.show(mainScreen_with_drawer.this, "",
                 "Loading. Please wait...", true);
