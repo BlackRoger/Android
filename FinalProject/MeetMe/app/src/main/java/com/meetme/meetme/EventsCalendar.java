@@ -30,45 +30,29 @@ public class EventsCalendar extends AppCompatActivity {
 
         @Override
         public void onSelectDate(Date date, View view) {
-            Toast.makeText(getApplicationContext(), dateFormat.format(date),
-                    Toast.LENGTH_SHORT).show();
 
-            // TODO: Check first if there are any other events
+
             mModifiedDate = date;
             Intent ViewDayIntent = new Intent(getApplicationContext(), DayViewer.class);
             Long Time = date.getTime();
             ViewDayIntent.putExtra(ARG_LONG_DATE, Time);
             startActivity(ViewDayIntent);
-
-            /*
-            Intent NewEventIntent = new Intent(getApplicationContext(), AddNewEventActivity.class);
-            NewEventIntent.getExtras().putLong(ARG_LONG_DATE, date.getTime());
-            startActivity(NewEventIntent);
-            */
-
-            //SetDateColor(date);
-            //caldroidFragment.refreshView();
         }
 
         @Override
         public void onChangeMonth(int month, int year) {
             String text = "month: " + month + " year: " + year;
-            Toast.makeText(getApplicationContext(), text,
-                    Toast.LENGTH_SHORT).show();
+
         }
 
         @Override
         public void onLongClickDate(Date date, View view) {
-            Toast.makeText(getApplicationContext(),
-                    "Long click " + dateFormat.format(date),
-                    Toast.LENGTH_SHORT).show();
+
         }
 
         @Override
         public void onCaldroidViewCreated() {
-            Toast.makeText(getApplicationContext(),
-                    "Caldroid view is created",
-                    Toast.LENGTH_SHORT).show();
+
         }
 
     };
@@ -134,9 +118,6 @@ public class EventsCalendar extends AppCompatActivity {
             caldroidFragment.setBackgroundResourceForDate(R.color.caldroid_holo_blue_dark, date);
         else
             caldroidFragment.setBackgroundResourceForDate(R.color.caldroid_black, date);
-        //caldroidFragment.setTextColorForDate(R.color.white, blueDate);
-
-        //caldroidFragment.refreshView();
     }
 
     @Override

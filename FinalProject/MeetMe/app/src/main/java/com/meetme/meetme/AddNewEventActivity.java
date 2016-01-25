@@ -322,17 +322,6 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.OrganizerId = Profile.getCurrentProfile().getId().toString();
         NewEvent.SecondaryId = "";
 
-        /* add event id and increase it*/
-        /*
-        EventIdpref = getPreferences(MODE_PRIVATE);
-        int EventId = EventIdpref.getInt("EVENT_ID", 0);
-        EventId++;
-        SharedPreferences.Editor editor = EventIdpref.edit();
-        editor.putInt("EVENT_ID", EventId);
-        editor.commit();
-
-        NewEvent.SecondaryId = EventId + "";
-        */
 
         if (IsJoinEvent) {
             DataManager.getInstance(this).AddEvent(NewEvent);

@@ -12,9 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by azolotushko on 11/30/2015.
- */
+
 public class DataBaseOp extends SQLiteOpenHelper {
 
     private static final String COMMA_SEP = ", ";

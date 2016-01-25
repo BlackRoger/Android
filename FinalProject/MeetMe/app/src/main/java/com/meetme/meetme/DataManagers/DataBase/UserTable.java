@@ -2,9 +2,7 @@ package com.meetme.meetme.DataManagers.DataBase;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by Guy on 09-Jan-16.
- */
+
 public class UserTable {
 
     public static abstract class UserInfo implements BaseColumns {

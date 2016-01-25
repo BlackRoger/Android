@@ -2,9 +2,7 @@ package com.meetme.meetme.DataManagers.DataBase;
 
 import com.parse.ParseObject;
 
-/**
- * Created by Guy on 09-Jan-16.
- */
+
 public class UserInfo extends ParseObject {
     public String Name;
     public Boolean IsMe;
