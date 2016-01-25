@@ -55,6 +55,7 @@ public class FriendList extends AppCompatActivity {
     Integer mCurrItemPosition;
     List<FriendsInfo> friendsList;
     RecyclerView recyclerView;
+    private List<EventInfo> mReceivedEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,13 @@ public class FriendList extends AppCompatActivity {
         setContentView(R.layout.activity_friend_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view2);
         recyclerView.setHasFixedSize(true);
         gaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
@@ -253,10 +261,17 @@ public class FriendList extends AppCompatActivity {
 
         @Override
         public void onClick(View view) {
+            mReceivedEvents = new ArrayList<EventInfo>();
             mCurrItemPosition = getPosition();
             FriendsInfo friend = ((SolventRecyclerViewAdapter)
                     ((RecyclerView) view.getParent()).getAdapter()).getItemAtPosition(mCurrItemPosition);
-            Toast.makeText(view.getContext(), "Friend ID = " + friend.id, Toast.LENGTH_SHORT).show();
+            String friend_id = friend.id;
+            Intent intent = new Intent(FriendList.this, FriendsActivity.class);
+            Bundle b = new Bundle();
+            b.putString("friend_id",friend_id);
+            intent.putExtras(b); //Put your id to your next Intent
+            startActivity(intent);
+
         }
     }
 

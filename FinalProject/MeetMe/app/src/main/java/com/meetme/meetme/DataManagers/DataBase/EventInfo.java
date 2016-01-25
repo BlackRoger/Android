@@ -7,10 +7,6 @@ import com.parse.SaveCallback;
 
 import java.io.Serializable;
 
-/**
- * Created by Guy on 09-Jan-16.
- */
-
 @ParseClassName(EventTable.EventInfo.TABLE_NAME)
 public class EventInfo extends ParseObject implements Serializable{
 
@@ -101,5 +97,6 @@ public class EventInfo extends ParseObject implements Serializable{
         put(EventTable.EventInfo.EVENT_SECONDARY_TYPE, EventSecondaryType);
         put(EventTable.EventInfo.RECURRENCE, Recurrence.ordinal());
         put(EventTable.EventInfo.LOCATION, Location);
+        put(EventTable.EventInfo.SECONDARY_ID, SecondaryId);
     }
 }

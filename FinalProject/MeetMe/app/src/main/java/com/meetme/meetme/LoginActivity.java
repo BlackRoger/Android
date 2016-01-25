@@ -39,9 +39,9 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
         bFirstTime = true;
 
 
-        Parse.enableLocalDatastore(this);
+    //    Parse.enableLocalDatastore(this);
 
-        Parse.initialize(this);
+    //    Parse.initialize(this);
   //      toolbar = (Toolbar) findViewById(R.id.app_bar);
   //      setSupportActionBar(toolbar);
 
@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
         super.onResume();
         if(bFirstTime && Profile.getCurrentProfile() != null) {
             startActivity(new Intent(this, mainScreen_with_drawer.class));
+            finish();
             bFirstTime = false;
         } else {
             addButton();
@@ -100,10 +101,11 @@ public class LoginActivity extends AppCompatActivity implements LoginActivityFra
     @Override
     public void SuccessfulLogin(Profile profile) {
 
-        if (DataManager.getInstance(this).GetMyInfo() == null)
-            DataManager.getInstance(this).SetMyInfo(profile.getName());
+      /*  if (DataManager.getInstance(this).GetMyInfo() == null)
+            DataManager.getInstance(this).SetMyInfo(profile.getName());*/
 
         startActivity(new Intent(this, mainScreen_with_drawer.class));
+        finish();
     }
 
     /********************************************************************/

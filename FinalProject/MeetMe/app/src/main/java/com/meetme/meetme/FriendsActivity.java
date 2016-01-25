@@ -4,110 +4,79 @@ import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.HttpMethod;
-import com.facebook.Profile;
-import com.facebook.login.LoginManager;
-import com.facebook.login.widget.LoginButton;
-import com.facebook.login.widget.ProfilePictureView;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
 import com.meetme.meetme.DataManagers.DataManager;
 
-public class mainScreen_with_drawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import java.io.InputStream;
+import java.net.URL;
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
+public class FriendsActivity extends AppCompatActivity {
 
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
     SolventRecyclerViewAdapter rcAdapter;
     Integer mCurrItemPosition;
     private DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
-    ProgressDialog dialog;
     RecyclerView recyclerView;
+    ProgressDialog dialog;
+  //  private List<EventInfo> mReceivedEvents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_screen_with_drawer);
+        setContentView(R.layout.activity_friends);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        displayWelcomeMessage(Profile.getCurrentProfile(), navigationView);
-
-        /********************************************************/
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_main_screen_add_new_event);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddNewEvent();
+                finish();
             }
         });
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+
         gaggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
 
-      //  List<EventInfo> gaggeredList = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
-    /*    List<EventInfo> gaggeredList = DataManager.getInstance(this).FindEventByFriend(Profile.getCurrentProfile().getId().toString());
 
-        rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, gaggeredList);
-        recyclerView.setAdapter(rcAdapter);*/
 
-        String profile_id = Profile.getCurrentProfile().getId().toString();
-        new GetActivities().execute(profile_id);
-        dialog = ProgressDialog.show(mainScreen_with_drawer.this, "",
+
+
+        Bundle b = getIntent().getExtras();
+        String friend_id = b.getString("friend_id");
+        new GetActivities().execute(friend_id);
+        dialog = ProgressDialog.show(FriendsActivity.this, "",
                 "Loading. Please wait...", true);
 
-
-        /******************************************************************/
     }
+
     private class GetActivities extends AsyncTask<String, Void, List<EventInfo>> {
         int mPosition;
         List<EventInfo> mReceivedEvents;
@@ -117,10 +86,10 @@ public class mainScreen_with_drawer extends AppCompatActivity
         }*/
 
         protected List<EventInfo> doInBackground(String... string) {
-            String profile_id = string[0];
+            String friend_id = string[0];
             mReceivedEvents = null;
             try {
-                mReceivedEvents = DataManager.getInstance(getBaseContext()).FindEventByFriend(profile_id);
+                mReceivedEvents = DataManager.getInstance(getBaseContext()).FindEventByFriend(friend_id);
 
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
@@ -135,95 +104,12 @@ public class mainScreen_with_drawer extends AppCompatActivity
                 TextView textView = (TextView) findViewById(R.id.message);
                 textView.setText(R.string.noActivity);
             }
-            rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, result);
+            rcAdapter = new SolventRecyclerViewAdapter(FriendsActivity.this, result);
             recyclerView.setAdapter(rcAdapter);
         }
 
     }
 
-    private void AddNewEvent() {
-        // The floating action bar sends to add new event activity
-        Intent AddEventIntent = new Intent(getApplicationContext(),
-                AddNewEventActivity.class);
-        AddEventIntent.putExtra(AddNewEventActivity.EVENT_DATE, new Date().getTime());
-        startActivityForResult(AddEventIntent, AddNewEventActivity.ADD_EVENT_REQUEST);
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_screen_with_drawer, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_friends) {
-            //  startActivity(new Intent(this, FriendsScrollingActivity.class));
-            startActivity(new Intent(this, FriendList.class));
-        } else if (id == R.id.nav_my_callendar) {
-            startActivity(new Intent(this, EventsCalendar.class));
-        } else if (id == R.id.nav_search_events) {
-            startActivity(new Intent(this, SearchEventsActivity.class));
-        } else if (id == R.id.nav_Logout) {
-            LoginManager.getInstance().logOut();
-            finish();
-        }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
-    private void displayWelcomeMessage(Profile profile, NavigationView navigationView) {
-        if (profile != null) {
-
-            // NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            //  navigationView.setNavigationItemSelectedListener(this);
-
-            View headerView = navigationView.inflateHeaderView(R.layout.nav_header_main_screen_with_drawer);
-
-            Log.d("The Profile is:", profile.getName());
-            ProfilePictureView profileImage = (ProfilePictureView) headerView.findViewById(R.id.profilePicture);
-            if (profileImage != null)
-                profileImage.setProfileId(profile.getId());
-
-            TextView textView = (TextView) headerView.findViewById(R.id.userName);
-            if (textView != null)
-                textView.setText("Welcome " + profile.getName());
-
-
-        }
-    }
 
     public class SolventRecyclerViewAdapter extends RecyclerView.Adapter<SolventViewHolders> {
 
@@ -270,12 +156,12 @@ public class mainScreen_with_drawer extends AppCompatActivity
             EventInfo CurrEvent = itemList.get(position);
 
             holder.eventName.setText(CurrEvent.Name);
-           // holder.eventDescription.setText(itemList.get(position).Description);
+            // holder.eventDescription.setText(itemList.get(position).Description);
             EventInfo.eEventTypes EventType = itemList.get(position).EventType;
             Integer EventSecondaryType = itemList.get(position).EventSecondaryType;
-           // getEventTypeImage(EventType ,EventSecondaryType);
+            // getEventTypeImage(EventType ,EventSecondaryType);
             holder.eventTime.setText(dateFormat.format(CurrEvent.StartDate) + " - " +
-            timeFormat.format(CurrEvent.StartDate));
+                    timeFormat.format(CurrEvent.StartDate));
 
             holder.eventTypePhoto.setImageDrawable(getEventTypeImage(EventType, EventSecondaryType));
         }
@@ -312,31 +198,6 @@ public class mainScreen_with_drawer extends AppCompatActivity
             EditEvent(event);
         }
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        if (resultCode == RESULT_OK) {
-            switch(requestCode) {
-                case (AddNewEventActivity.ADD_EVENT_REQUEST) :
-                    rcAdapter.insertNewItem((EventInfo)data.getExtras().getSerializable(
-                            AddNewEventActivity.EVENT_FINAL));
-                    rcAdapter.notifyDataSetChanged();
-                    break;
-                case (AddNewEventActivity.UPDATE_EVENT_REQUEST) :
-                    if (data.getExtras().getBoolean(AddNewEventActivity.EVENT_REMOVED)) {
-                        rcAdapter.removeItemAtPosition(mCurrItemPosition);
-                    } else {
-                        rcAdapter.UpdateItemAtPosition(mCurrItemPosition,
-                                (EventInfo) data.getExtras().getSerializable(AddNewEventActivity.EVENT_FINAL));
-                    }
-
-                    rcAdapter.notifyItemChanged(mCurrItemPosition);
-                    break;
-            }
-        }
-    }
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private Drawable getEventTypeImage(EventInfo.eEventTypes eventType, Integer eventSecondaryType) {
         ImageView imageView = null;
@@ -407,26 +268,10 @@ public class mainScreen_with_drawer extends AppCompatActivity
         return drawable;
     }
 
+
     private void EditEvent(EventInfo Event) {
         Intent EditEventIntent = new Intent(this, AddNewEventActivity.class);
         EditEventIntent.putExtra(AddNewEventActivity.EVENT_INFO, Event);
         startActivityForResult(EditEventIntent, AddNewEventActivity.UPDATE_EVENT_REQUEST);
     }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-      /*  List<EventInfo> gaggeredList = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
-        rcAdapter.UpdateList(gaggeredList);
-        rcAdapter.notifyDataSetChanged();
-        String profile_id = Profile.getCurrentProfile().getId().toString();
-        new GetActivities().execute(profile_id);
-        dialog = ProgressDialog.show(mainScreen_with_drawer.this, "",
-                "Loading. Please wait...", true);
-*/
-        // TODO: Make the list update on new events here
-    }
-
 }
