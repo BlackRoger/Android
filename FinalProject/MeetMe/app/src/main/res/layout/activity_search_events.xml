@@ -39,11 +39,13 @@
             android:inputType="text"/>
     </LinearLayout>
 
+    <!--
     <CheckBox
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/check_box_near_me"
         android:id="@+id/check_box_near_me" />
+        -->
 
     <LinearLayout
         android:layout_width="match_parent"

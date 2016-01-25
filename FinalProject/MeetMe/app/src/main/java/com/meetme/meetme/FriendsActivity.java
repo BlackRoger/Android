@@ -92,6 +92,8 @@ public class FriendsActivity extends AppCompatActivity implements DataManager.Ev
             Columns[Index] = EventTable.EventInfo.ORGANIZER;
             Filters[Index] = friend_id;
             Index++;
+        } else {
+
         }
 
         if (EventName != null) {
@@ -120,7 +122,7 @@ public class FriendsActivity extends AppCompatActivity implements DataManager.Ev
             FinalFilters[col] = Filters[col];
         }
 
-        DataManager.getInstance(this).FindEventByFilter(FinalColumns, FinalFilters, this);
+        DataManager.getInstance(this).FindEventByFilter(FinalColumns, FinalFilters, this, false);
     }
 
     public void GetEvents(List<EventInfo> Events) {

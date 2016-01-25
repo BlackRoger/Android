@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.facebook.Profile;
 import com.meetme.meetme.DataManagers.DataBase.DataBaseOp;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
 import com.meetme.meetme.DataManagers.DataBase.EventTable;
@@ -142,17 +143,24 @@ public class DataManager {
         tmpEvent.deleteInBackground();
     }
 
-    public void FindEventByFriend(String FriendId, final EventsReady Callback) {
+    public void FindEventByFriend(String FriendId, final EventsReady Callback, boolean IncludesMe) {
         FindEventByFilter(new String[] {EventTable.EventInfo.ORGANIZER}, new Object[] {FriendId},
-                Callback);
+                Callback, IncludesMe);
     }
 
-    public void FindEventByFilter(String Columns[], Object Values[], final EventsReady Callback) {
+    public void FindEventByFilter(String Columns[], Object Values[], final EventsReady Callback,
+                                  boolean IncludesMe) {
         final ParseQuery<ParseObject> query = ParseQuery.getQuery(EventTable.EventInfo.TABLE_NAME);
 
         for (int i = 0; i < Columns.length; i++) {
             query.whereEqualTo(Columns[i], Values[i]);
         }
+
+        if (!IncludesMe) {
+            query.whereNotEqualTo(EventTable.EventInfo.ORGANIZER,
+                    Profile.getCurrentProfile().getId().toString());
+        }
+
         mReceivedEvents = new ArrayList<EventInfo>();
 
         // Retrieve the object by id
