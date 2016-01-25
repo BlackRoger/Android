@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.facebook.Profile;
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
@@ -38,6 +39,7 @@ public class AddNewEventActivity extends AppCompatActivity
     public static final String EVENT_REMOVED = "Event_Removed";
     public static final int ADD_EVENT_REQUEST = 1;
     public static final int UPDATE_EVENT_REQUEST = 2;
+    // public static final int JOIN_EVENT_REQUEST = 3;
 
     Date mFromDate;
     Date mToDate;
@@ -49,6 +51,7 @@ public class AddNewEventActivity extends AppCompatActivity
     Date RelevantDate;
     boolean IgnoreNextEventSelection;
     boolean IsUpdatingEvent;
+    boolean IsJoinEvent = false;
 
     EditText txtName;
     EditText txtDescryption;
@@ -62,42 +65,57 @@ public class AddNewEventActivity extends AppCompatActivity
     Spinner spnEventTypeSpinner;
     Spinner spnEventSubtypeSpinner;
     SharedPreferences EventIdpref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Date NewEventDate = null;
         super.onCreate(savedInstanceState);
         Serializable Input = getIntent().getExtras().getSerializable(EVENT_INFO);
 
-        // Check if we were asked to modify an existing event
-        if (Input != null) {
-            mOldEvent = (EventInfo)Input;
+        Bundle b = getIntent().getExtras();
+        String requestType = b.getString("requestType");
+        if (requestType == null)
+            requestType = "";
+
+        if (requestType.equals("Join")) {
+            NewEventDate = new Date(getIntent().getExtras().getLong(EVENT_DATE));
+            mOldEvent = (EventInfo) Input;
             mFromDate = new Date(((EventInfo) Input).StartDate.longValue());
             mToDate = new Date(((EventInfo) Input).EndDate.longValue());
+            IsJoinEvent = true;
             IsUpdatingEvent = true;
-            setContentView(R.layout.activity_modify_event);
+            setContentView(R.layout.activity_join_event);
         } else {
-            NewEventDate = new Date(getIntent().getExtras().getLong(EVENT_DATE));
-            mFromDate = new Date(NewEventDate.getTime());
-            mToDate = new Date(NewEventDate.getTime());
-            IsUpdatingEvent = false;
-            setContentView(R.layout.activity_add_new_event);
+            // Check if we were asked to modify an existing event
+            if (Input != null) {
+                mOldEvent = (EventInfo) Input;
+                mFromDate = new Date(((EventInfo) Input).StartDate.longValue());
+                mToDate = new Date(((EventInfo) Input).EndDate.longValue());
+                IsUpdatingEvent = true;
+                setContentView(R.layout.activity_modify_event);
+            } else {
+                NewEventDate = new Date(getIntent().getExtras().getLong(EVENT_DATE));
+                mFromDate = new Date(NewEventDate.getTime());
+                mToDate = new Date(NewEventDate.getTime());
+                IsUpdatingEvent = false;
+                setContentView(R.layout.activity_add_new_event);
+            }
         }
-
         IgnoreNextEventSelection = true;
         mCalendar.setTimeZone(TimeZone.getDefault());
 
         // initialize the spinners!
-        txtName                 = (EditText)findViewById(R.id.edit_text_event_name);
-        txtDescryption          = (EditText)findViewById(R.id.edit_text_event_descryption);
-        txtLocation             = (EditText)findViewById(R.id.edit_text_event_location);
-        spnEventSubtypeSpinner  = (Spinner) findViewById(R.id.spinner_event_sub_type);
-        spnRecurrenceSpinner    = (Spinner) findViewById(R.id.spinner_recurrence);
-        spnEventTypeSpinner     = (Spinner) findViewById(R.id.spinner_event_type);
-        txtFromDate             = (TextView)findViewById(R.id.edit_text_from_date);
-        txtFromTime             = (TextView)findViewById(R.id.edit_text_from_time);
-        txtToDate               = (TextView)findViewById(R.id.edit_text_to_date);
-        txtToTime               = (TextView)findViewById(R.id.edit_text_to_time);
-        txtParticipationCap     = (EditText)findViewById(R.id.edit_text_event_participation_cap);
+        txtName = (EditText) findViewById(R.id.edit_text_event_name);
+        txtDescryption = (EditText) findViewById(R.id.edit_text_event_descryption);
+        txtLocation = (EditText) findViewById(R.id.edit_text_event_location);
+        spnEventSubtypeSpinner = (Spinner) findViewById(R.id.spinner_event_sub_type);
+        spnRecurrenceSpinner = (Spinner) findViewById(R.id.spinner_recurrence);
+        spnEventTypeSpinner = (Spinner) findViewById(R.id.spinner_event_type);
+        txtFromDate = (TextView) findViewById(R.id.edit_text_from_date);
+        txtFromTime = (TextView) findViewById(R.id.edit_text_from_time);
+        txtToDate = (TextView) findViewById(R.id.edit_text_to_date);
+        txtToTime = (TextView) findViewById(R.id.edit_text_to_time);
+        txtParticipationCap = (EditText) findViewById(R.id.edit_text_event_participation_cap);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> RecurrenceAdapter = ArrayAdapter.createFromResource(this,
@@ -154,7 +172,7 @@ public class AddNewEventActivity extends AppCompatActivity
         // Set the to date/time
         int Minute = mCalendar.get(Calendar.MINUTE);
         int Hour = mCalendar.get(Calendar.HOUR);
-        if (Minute + 30 <= mCalendar.getActualMaximum(Calendar.MINUTE)){
+        if (Minute + 30 <= mCalendar.getActualMaximum(Calendar.MINUTE)) {
             Minute += 30;
         } else if (Hour == mCalendar.getActualMaximum(Calendar.HOUR)) {
             Minute = mCalendar.getActualMaximum(Calendar.MINUTE);
@@ -203,7 +221,7 @@ public class AddNewEventActivity extends AppCompatActivity
         ArrayAdapter<CharSequence> Adapter;
 
         // We need to know what is the event type to give a list of subtypes
-        switch(MainType) {
+        switch (MainType) {
             case EVENT_TYPE_SPORT:
                 Adapter = ArrayAdapter.createFromResource(this,
                         R.array.sport_event_types_array, android.R.layout.simple_spinner_item);
@@ -249,7 +267,7 @@ public class AddNewEventActivity extends AppCompatActivity
         DatePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker datepicker, int selectedyear, int selectedmonth, int selectedday) {
                 mCalendar.set(selectedyear, selectedmonth, selectedday);
-                ((TextView)tmpView).setText(mDateFormat.format(mCalendar.getTime()));
+                ((TextView) tmpView).setText(mDateFormat.format(mCalendar.getTime()));
 
                 RelevantDate.setTime(mCalendar.getTimeInMillis());
             }
@@ -299,7 +317,7 @@ public class AddNewEventActivity extends AppCompatActivity
 
         /* add event id and increase it*/
         EventIdpref = getPreferences(MODE_PRIVATE);
-        int EventId=EventIdpref.getInt("EVENT_ID", 0);
+        int EventId = EventIdpref.getInt("EVENT_ID", 0);
         EventId++;
         SharedPreferences.Editor editor = EventIdpref.edit();
         editor.putInt("EVENT_ID", EventId);
@@ -307,12 +325,18 @@ public class AddNewEventActivity extends AppCompatActivity
 
         NewEvent.SecondaryId = EventId + "";
 
-        if (IsUpdatingEvent) {
-            DataManager.getInstance(this).UpdateEvent(NewEvent);
-        } else {
+        if (IsJoinEvent) {
             DataManager.getInstance(this).AddEvent(NewEvent);
+            Toast.makeText(getApplicationContext(),
+                    "You have joined the event! ",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            if (IsUpdatingEvent) {
+                DataManager.getInstance(this).UpdateEvent(NewEvent);
+            } else {
+                DataManager.getInstance(this).AddEvent(NewEvent);
+            }
         }
-
         Intent ResultIntent = new Intent();
         ResultIntent.putExtra(EVENT_FINAL, NewEvent);
         ResultIntent.putExtra(EVENT_REMOVED, false);
