@@ -30,9 +30,9 @@
         android:src="@android:drawable/ic_menu_revert"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="false"
-        android:layout_alignParentEnd="false" />
+        android:layout_above="@+id/message"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="42dp" />
 
     <TextView
         android:id="@+id/message"
