@@ -268,7 +268,7 @@ public class FriendList extends AppCompatActivity {
             String friend_id = friend.id;
             Intent intent = new Intent(FriendList.this, FriendsActivity.class);
             Bundle b = new Bundle();
-            b.putString("friend_id",friend_id);
+            b.putString(FriendsActivity.INTENT_EXTRA_FRIEND_ID, friend_id);
             intent.putExtras(b); //Put your id to your next Intent
             startActivity(intent);
 

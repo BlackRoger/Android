@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
+import com.meetme.meetme.DataManagers.DataBase.EventTable;
 import com.meetme.meetme.DataManagers.DataManager;
 
 import java.io.InputStream;
@@ -35,6 +36,11 @@ import java.util.Date;
 import java.util.List;
 
 public class FriendsActivity extends AppCompatActivity implements DataManager.EventsReady {
+
+    public static final String INTENT_EXTRA_FRIEND_ID = "FRIEND_ID";
+    public static final String INTENT_EXTRA_EVENT_TYPE = "EVENT_TYPE";
+    public static final String INTENT_EXTRA_EVENT_SUB_TYPE = "EVENT_SUB_TYPE";
+    public static final String INTENT_EXTRA_EVENT_NAME = "EVENT_NAME";
 
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -65,18 +71,56 @@ public class FriendsActivity extends AppCompatActivity implements DataManager.Ev
         gaggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
 
-
-
-
-
         Bundle b = getIntent().getExtras();
-        String friend_id = b.getString("friend_id");
-        GetActivities(friend_id);
+        GetActivities(b.getString(INTENT_EXTRA_FRIEND_ID), b.getString(INTENT_EXTRA_EVENT_NAME),
+                b.getInt(INTENT_EXTRA_EVENT_TYPE, -1), b.getInt(INTENT_EXTRA_EVENT_SUB_TYPE, -1));
         /*
         dialog = ProgressDialog.show(FriendsActivity.this, "",
                 "Loading. Please wait...", true);
                 */
 
+    }
+
+    private void GetActivities(String friend_id, String EventName, int EventType,
+                               int EventSubType) {
+
+        Object Filters[] = {null, null, null, null, null};
+        String Columns[] = {"", "", "", "", ""};
+        int Index = 0;
+
+        if (friend_id != null) {
+            Columns[Index] = EventTable.EventInfo.ORGANIZER;
+            Filters[Index] = friend_id;
+            Index++;
+        }
+
+        if (EventName != null) {
+            Columns[Index] = EventTable.EventInfo.NAME;
+            Filters[Index] = EventName;
+            Index++;
+        }
+
+        if (EventType != -1) {
+            Columns[Index] = EventTable.EventInfo.EVENT_TYPE;
+            Filters[Index] = EventType;
+            Index++;
+        }
+
+        if (EventSubType != -1) {
+            Columns[Index] = EventTable.EventInfo.EVENT_SECONDARY_TYPE;
+            Filters[Index] = EventSubType;
+            Index++;
+        }
+
+        String FinalColumns[] = new String[Index];
+        Object FinalFilters[] = new Object[Index];
+
+        for (int col = 0; col < Index; col++) {
+            FinalColumns[col] = Columns[col];
+            FinalFilters[col] = Filters[col];
+        }
+
+        DataManager.getInstance(this).FindEventByFilter(FinalColumns, FinalFilters, this);
     }
 
     public void GetEvents(List<EventInfo> Events) {
@@ -86,10 +130,6 @@ public class FriendsActivity extends AppCompatActivity implements DataManager.Ev
         }
         rcAdapter = new SolventRecyclerViewAdapter(FriendsActivity.this, Events);
         recyclerView.setAdapter(rcAdapter);
-    }
-
-    private void GetActivities(String friend_id) {
-        DataManager.getInstance(getBaseContext()).FindEventByFriend(friend_id, this);
     }
 
     public class SolventRecyclerViewAdapter extends RecyclerView.Adapter<SolventViewHolders> {

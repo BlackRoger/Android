@@ -16,26 +16,29 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.meetme.meetme.DataManagers.DataBase.EventInfo;
+import com.meetme.meetme.DataManagers.DataBase.EventTable;
 import com.meetme.meetme.DataManagers.DataManager;
 
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 public class SearchEventsActivity extends AppCompatActivity
         implements AdapterView.OnItemSelectedListener {
 
+    /*
     Date ToDate;
     Calendar mCalendar = Calendar.getInstance();
     private DateFormat mTimeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
     private DateFormat mDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
     View tmpView;
     Date RelevantDate;
-    boolean IgnoreNextEventSelection;
-    boolean IsUpdatingEvent;
+    */
 
+    boolean IgnoreNextEventSelection;
     EditText txtName;
     CheckBox chkName;
     CheckBox chkLocation;
@@ -51,40 +54,26 @@ public class SearchEventsActivity extends AppCompatActivity
         setContentView(R.layout.activity_search_events);
 
         IgnoreNextEventSelection = true;
-        mCalendar.setTimeZone(TimeZone.getDefault());
+        // mCalendar.setTimeZone(TimeZone.getDefault());
 
         // initialize the spinners!
         txtName                 = (EditText)findViewById(R.id.edit_text_event_name);
         spnEventSubtypeSpinner  = (Spinner) findViewById(R.id.spinner_event_sub_type);
         spnEventTypeSpinner     = (Spinner) findViewById(R.id.spinner_event_type);
-        CheckBox chkName        = (CheckBox)findViewById(R.id.check_box_name);
-        CheckBox chkLocation    = (CheckBox)findViewById(R.id.check_box_near_me);
-        CheckBox chkEventType   = (CheckBox)findViewById(R.id.check_box_event_type);
-        CheckBox chkSubType     = (CheckBox)findViewById(R.id.check_box_event_sub_type);
+        chkName                 = (CheckBox)findViewById(R.id.check_box_name);
+        chkLocation             = (CheckBox)findViewById(R.id.check_box_near_me);
+        chkEventType            = (CheckBox)findViewById(R.id.check_box_event_type);
+        chkSubType              = (CheckBox)findViewById(R.id.check_box_event_sub_type);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> RecurrenceAdapter = ArrayAdapter.createFromResource(this,
-                R.array.recurrence_array, android.R.layout.simple_spinner_item);
         ArrayAdapter<CharSequence> EventTypeAdapter = ArrayAdapter.createFromResource(this,
                 R.array.event_types_array, android.R.layout.simple_spinner_item);
 
         // Specify the layout to use when the list of choices appears
-        RecurrenceAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         EventTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnEventTypeSpinner.setAdapter(EventTypeAdapter);
         spnEventTypeSpinner.setSelection(0);
         spnEventTypeSpinner.setOnItemSelectedListener(this);
-
-        InitViews();
-    }
-
-    void InitViews() {
-        /*
-        txtName.setText(ExistingEvent.Name);
-        spnEventTypeSpinner.setSelection(ExistingEvent.EventType.ordinal());
-        UpdateSubtypeSpinner(ExistingEvent.EventType);
-        spnEventSubtypeSpinner.setSelection(ExistingEvent.EventSecondaryType);
-        */
     }
 
     public void onItemSelected(AdapterView<?> parent, View view,
@@ -144,7 +133,29 @@ public class SearchEventsActivity extends AppCompatActivity
     }
 
     public void button_search(View view) {
-        //DataManager.getInstance(this).FindEventByFriend()
+        Object Filters[] = {null, null, null, null, null};
+        String Columns[] = {"", "", "", "", ""};
+        int Index = 0;
+
+        Intent intent = new Intent(this, FriendsActivity.class);
+        Bundle b = new Bundle();
+
+        if (chkName.isChecked()) {
+            b.putString(FriendsActivity.INTENT_EXTRA_EVENT_NAME, txtName.getText().toString());
+        }
+
+        if (chkEventType.isChecked()) {
+            b.putInt(FriendsActivity.INTENT_EXTRA_EVENT_TYPE,
+                    Integer.valueOf(spnEventTypeSpinner.getSelectedItemPosition()));
+
+            if (chkSubType.isChecked() && spnEventSubtypeSpinner.isEnabled()) {
+                b.putInt(FriendsActivity.INTENT_EXTRA_EVENT_SUB_TYPE,
+                        Integer.valueOf(spnEventSubtypeSpinner.getSelectedItemPosition()));
+            }
+        }
+
+        intent.putExtras(b); //Put your id to your next Intent
+        startActivity(intent);
     }
 
     public void button_clear(View view) {
@@ -152,5 +163,10 @@ public class SearchEventsActivity extends AppCompatActivity
         chkLocation.setChecked(false);
         chkName.setChecked(false);
         chkSubType.setChecked(false);
+
+        spnEventTypeSpinner.setSelection(0);
+        spnEventSubtypeSpinner.setEnabled(false);
+        spnEventSubtypeSpinner.setClickable(false);
+        txtName.setText("");
     }
 }

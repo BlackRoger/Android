@@ -13,7 +13,7 @@
     <string name="login1">"Create new Activities and manage a Schedule in a very easy way!"</string>
     <string name="login3">Filter activities by type for better results</string>
     <string name="login2">Find what your friends are up to, and join their mutual activities</string>
-    <string name="noActivity">This user has no activities!</string>
+    <string name="noActivity">No activities found!</string>
 
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -91,6 +91,6 @@
         <item>Club</item>
     </string-array>
     <string name="title_activity_splash_screen">SplashScreen</string>
-    <string name="title_activity_friends">FriendsActivity</string>
+    <string name="title_activity_friends">Found Activities</string>
 
 </resources>
