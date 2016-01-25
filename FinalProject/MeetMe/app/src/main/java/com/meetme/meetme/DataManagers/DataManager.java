@@ -33,6 +33,7 @@ public class DataManager {
     private DataBaseOp mDb;
     private EventInfo tmpEvent;
     private List<EventInfo> mReceivedEvents;
+    private Context mContext;
 
     public interface EventsReady {
         public void GetEvents(List<EventInfo> Events);
@@ -40,9 +41,32 @@ public class DataManager {
 
     public DataManager(Context context) {
         mDb = new DataBaseOp(context);
+        mContext = context;
+
         ParseObject.registerSubclass(EventInfo.class);
-        // Add your initialization code here
         Parse.initialize(context);
+
+        // If the database was just created, check if there are any events in parse
+        if (mDb.WasDbJustCreated) {
+            EventsReady Callback = new EventsReady() {
+                @Override
+                public void GetEvents(List<EventInfo> Events) {
+                    for (EventInfo event : Events) {
+                        mDb.AddEvent(event);
+                    }
+
+                    // Now make sure the current display is updated
+                    if (mContext instanceof EventsReady) {
+                        ((EventsReady)mContext).GetEvents(Events);
+                    }
+                }
+            };
+
+            FindEventByFriend(Profile.getCurrentProfile().getId().toString(),
+                    Callback, true);
+
+            mDb.WasDbJustCreated = false;
+        }
     }
 
     public static DataManager getInstance(Context context)
