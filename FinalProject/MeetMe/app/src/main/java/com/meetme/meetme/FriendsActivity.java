@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class FriendsActivity extends AppCompatActivity {
+public class FriendsActivity extends AppCompatActivity implements DataManager.EventsReady {
 
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
     private DateFormat timeFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
@@ -71,45 +71,26 @@ public class FriendsActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         String friend_id = b.getString("friend_id");
-        new GetActivities().execute(friend_id);
+        GetActivities(friend_id);
+        /*
         dialog = ProgressDialog.show(FriendsActivity.this, "",
                 "Loading. Please wait...", true);
+                */
 
     }
 
-    private class GetActivities extends AsyncTask<String, Void, List<EventInfo>> {
-        int mPosition;
-        List<EventInfo> mReceivedEvents;
-
-      /*  public GetActivities(int position) {
-            mPosition = position;
-        }*/
-
-        protected List<EventInfo> doInBackground(String... string) {
-            String friend_id = string[0];
-            mReceivedEvents = null;
-            try {
-                mReceivedEvents = DataManager.getInstance(getBaseContext()).FindEventByFriend(friend_id);
-
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return  mReceivedEvents;
+    public void GetEvents(List<EventInfo> Events) {
+        if (Events.size() == 0){
+            TextView textView = (TextView) findViewById(R.id.message);
+            textView.setText(R.string.noActivity);
         }
-
-        protected void onPostExecute(List<EventInfo> result) {
-            dialog.dismiss();
-            if (result.size() == 0){
-                TextView textView = (TextView) findViewById(R.id.message);
-                textView.setText(R.string.noActivity);
-            }
-            rcAdapter = new SolventRecyclerViewAdapter(FriendsActivity.this, result);
-            recyclerView.setAdapter(rcAdapter);
-        }
-
+        rcAdapter = new SolventRecyclerViewAdapter(FriendsActivity.this, Events);
+        recyclerView.setAdapter(rcAdapter);
     }
 
+    private void GetActivities(String friend_id) {
+        DataManager.getInstance(getBaseContext()).FindEventByFriend(friend_id, this);
+    }
 
     public class SolventRecyclerViewAdapter extends RecyclerView.Adapter<SolventViewHolders> {
 

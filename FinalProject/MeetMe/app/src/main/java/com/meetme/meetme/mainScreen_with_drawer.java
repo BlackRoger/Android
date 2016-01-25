@@ -51,7 +51,7 @@ import com.meetme.meetme.DataManagers.DataBase.EventInfo;
 import com.meetme.meetme.DataManagers.DataManager;
 
 public class mainScreen_with_drawer extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DataManager.EventsReady {
 
 
     private StaggeredGridLayoutManager gaggeredGridLayoutManager;
@@ -91,54 +91,35 @@ public class mainScreen_with_drawer extends AppCompatActivity
                 AddNewEvent();
             }
         });
+
         gaggeredGridLayoutManager = new StaggeredGridLayoutManager(3, 1);
         recyclerView.setLayoutManager(gaggeredGridLayoutManager);
 
-      //  List<EventInfo> gaggeredList = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
-    /*    List<EventInfo> gaggeredList = DataManager.getInstance(this).FindEventByFriend(Profile.getCurrentProfile().getId().toString());
+        List<EventInfo> gaggeredList = DataManager.getInstance(this).GetMyEventsByMonth(new Date());
 
         rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, gaggeredList);
-        recyclerView.setAdapter(rcAdapter);*/
+        recyclerView.setAdapter(rcAdapter);
 
-        String profile_id = Profile.getCurrentProfile().getId().toString();
-        new GetActivities().execute(profile_id);
-        dialog = ProgressDialog.show(mainScreen_with_drawer.this, "",
-                "Loading. Please wait...", true);
+        //String profile_id = Profile.getCurrentProfile().getId().toString();
+        //GetActivities(profile_id);
+        //dialog = ProgressDialog.show(mainScreen_with_drawer.this, "",
+        //        "Loading. Please wait...", true);
 
 
         /******************************************************************/
     }
-    private class GetActivities extends AsyncTask<String, Void, List<EventInfo>> {
-        int mPosition;
-        List<EventInfo> mReceivedEvents;
 
-      /*  public GetActivities(int position) {
-            mPosition = position;
-        }*/
-
-        protected List<EventInfo> doInBackground(String... string) {
-            String profile_id = string[0];
-            mReceivedEvents = null;
-            try {
-                mReceivedEvents = DataManager.getInstance(getBaseContext()).FindEventByFriend(profile_id);
-
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return  mReceivedEvents;
+    public void GetEvents(List<EventInfo> Events) {
+        if (Events.size() == 0){
+            TextView textView = (TextView) findViewById(R.id.message);
+            textView.setText(R.string.noActivity);
         }
+        rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, Events);
+        recyclerView.setAdapter(rcAdapter);
+    }
 
-        protected void onPostExecute(List<EventInfo> result) {
-            dialog.dismiss();
-            if (result.size() == 0){
-                TextView textView = (TextView) findViewById(R.id.message);
-                textView.setText(R.string.noActivity);
-            }
-            rcAdapter = new SolventRecyclerViewAdapter(mainScreen_with_drawer.this, result);
-            recyclerView.setAdapter(rcAdapter);
-        }
-
+    private void GetActivities(String friend_id) {
+        DataManager.getInstance(getBaseContext()).FindEventByFriend(friend_id, this);
     }
 
     private void AddNewEvent() {

@@ -303,6 +303,7 @@ public class AddNewEventActivity extends AppCompatActivity
 
     public void button_on_click_confirm(View view) {
         EventInfo NewEvent = new EventInfo();
+        NewEvent.Id = mOldEvent.Id;
         NewEvent.Name = txtName.getText().toString();
         NewEvent.Description = txtDescryption.getText().toString();
         NewEvent.Location = txtLocation.getText().toString();
@@ -324,17 +325,10 @@ public class AddNewEventActivity extends AppCompatActivity
 
         NewEvent.SecondaryId = EventId + "";
 
-        if (IsJoinEvent) {
-            DataManager.getInstance(this).AddEvent(NewEvent);
-            Toast.makeText(getApplicationContext(),
-                    "You have joined the event! ",
-                    Toast.LENGTH_SHORT).show();
+        if (IsUpdatingEvent) {
+            DataManager.getInstance(this).UpdateEvent(NewEvent);
         } else {
-            if (IsUpdatingEvent) {
-                DataManager.getInstance(this).UpdateEvent(mOldEvent, NewEvent);
-            } else {
-                DataManager.getInstance(this).AddEvent(NewEvent);
-            }
+            DataManager.getInstance(this).AddEvent(NewEvent);
         }
 
         Intent ResultIntent = new Intent();

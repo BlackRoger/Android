@@ -219,6 +219,36 @@ public class DataBaseOp extends SQLiteOpenHelper {
         return EventsList;
     }
 
+    public EventInfo FindEventById(Long Id) {
+        SQLiteDatabase SQ = this.getReadableDatabase();
+        String Selection = EventTable.EventInfo._ID + "= ?";
+        String args[] = {Id.toString()};
+        String[] columns = {EventTable.EventInfo.NAME, EventTable.EventInfo.DESCRIPTION,
+                EventTable.EventInfo.ORGANIZER, EventTable.EventInfo.PARTICIPATION_CAP,
+                EventTable.EventInfo.START_DATE, EventTable.EventInfo.END_DATE,
+                EventTable.EventInfo.EVENT_TYPE, EventTable.EventInfo.EVENT_SECONDARY_TYPE,
+                EventTable.EventInfo.RECURRENCE, EventTable.EventInfo.LOCATION,
+                EventTable.EventInfo.SECONDARY_ID, EventTable.EventInfo._ID};
+        Cursor cr = SQ.query(EventTable.EventInfo.TABLE_NAME, columns, Selection,
+                args, null, null, null);
+
+        // Now transform the cursor to a normal event list
+        cr.moveToFirst();
+        EventInfo currEvent = null;
+
+        if (!cr.isAfterLast())
+        {
+            currEvent = new EventInfo(cr.getString(0), cr.getString(1),
+                    cr.getString(2), cr.getInt(3),
+                    cr.getLong(4), cr.getLong(5),
+                    EventInfo.eEventTypes.values()[cr.getInt(6)], cr.getInt(7),
+                    EventInfo.eReccurence.values()[cr.getInt(8)], cr.getString(9),
+                    cr.getString(10), cr.getLong(11));
+        }
+
+        return currEvent;
+    }
+
     public void UpdateEvent(EventInfo OldEvent, EventInfo NewEvent){
         String selection = EventTable.EventInfo._ID + "= ?";
         String args[] = {String.valueOf(OldEvent.Id)};
