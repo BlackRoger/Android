@@ -35,9 +35,16 @@ public class DayViewer extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab);
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_new_event);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab2 = (FloatingActionButton) findViewById(R.id.fab_add_new_event);
+        fab2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AddNewEvent();

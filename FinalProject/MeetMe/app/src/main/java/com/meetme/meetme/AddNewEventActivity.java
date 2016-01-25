@@ -106,7 +106,7 @@ public class AddNewEventActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        
+
         IgnoreNextEventSelection = true;
         mCalendar.setTimeZone(TimeZone.getDefault());
 
@@ -309,7 +309,7 @@ public class AddNewEventActivity extends AppCompatActivity
 
     public void button_on_click_confirm(View view) {
         EventInfo NewEvent = new EventInfo();
-        NewEvent.Id = mOldEvent.Id;
+        NewEvent.Id = (mOldEvent != null) ? mOldEvent.Id : null;
         NewEvent.Name = txtName.getText().toString();
         NewEvent.Description = txtDescryption.getText().toString();
         NewEvent.Location = txtLocation.getText().toString();
@@ -320,8 +320,10 @@ public class AddNewEventActivity extends AppCompatActivity
         NewEvent.EndDate = mToDate.getTime();
         NewEvent.Recurrence = EventInfo.eReccurence.values()[spnRecurrenceSpinner.getSelectedItemPosition()];
         NewEvent.OrganizerId = Profile.getCurrentProfile().getId().toString();
+        NewEvent.SecondaryId = "";
 
         /* add event id and increase it*/
+        /*
         EventIdpref = getPreferences(MODE_PRIVATE);
         int EventId = EventIdpref.getInt("EVENT_ID", 0);
         EventId++;
@@ -330,6 +332,7 @@ public class AddNewEventActivity extends AppCompatActivity
         editor.commit();
 
         NewEvent.SecondaryId = EventId + "";
+        */
 
         if (IsJoinEvent) {
             DataManager.getInstance(this).AddEvent(NewEvent);
